@@ -1,24 +1,29 @@
 import { NodePath, Node } from '@babel/traverse';
 import { FlowRoles } from '../../types/profile';
-import { ToolGenerator } from '../../types/babel-plugin/state';
-import { isNotNullPath } from '../util/path';
+import { isTruthyPath } from '../util/path';
+import ToolHelper from './helper';
+import getScope from './getScope';
 
-export type Register = <TNode extends Node>(path: NodePath<TNode | null>, roles?: FlowRoles) => void;
-
-const genRegister: ToolGenerator<Register> = (state) => (path, roles = {}) => {
+const register = ToolHelper((
+  ctx,
+  path: NodePath<Node | null>,
+  roles: FlowRoles = {}
+) => {
+  const { state } = ctx;
   if (state.visited) return;
-  if (!isNotNullPath(path)) {
+  if (!isTruthyPath(path)) {
     return;
   }
   
   if (!path.profile) {
     const { type, start, end } = path.node;
     if (start === null || end === null) return;
-    path.profile = { type, start, end, roles: {} };
+    const scopeId = getScope(ctx, path).id;
+    path.profile = { type, start, end, scopeId, ...roles };
     state.allPath.push(path);
+  } else {
+    Object.assign(path.profile, roles);
   }
-  
-  Object.assign(path.profile.roles, roles);
-};
+});
 
-export default genRegister;
+export default register;

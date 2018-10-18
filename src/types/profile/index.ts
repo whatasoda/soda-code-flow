@@ -1,5 +1,6 @@
 import { Node } from '@babel/traverse';
 import { FunctionRole, ProgramRole, DeclarationRole } from './roles';
+import { ScopeProfile } from '../babel-plugin/state';
 
 declare module '@babel/traverse' {
   interface NodePath<T = Node> {
@@ -7,11 +8,11 @@ declare module '@babel/traverse' {
   }
 }
 
-export interface FlowProfile {
+export interface FlowProfile extends FlowRoles {
   type: Node['type'];
   start: number;
   end: number;
-  roles: FlowRoles;
+  scopeId: ScopeProfile['id'];
 }
 
 export interface FlowRoles {

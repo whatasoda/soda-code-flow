@@ -1,11 +1,15 @@
-import * as Babel from '@babel/core';
-
 import { NodePath, Node } from '@babel/traverse';
 
 export interface CodeState {
   stepCallee: string;
   visited: boolean;
   allPath: Array<NodePath<Node>>;
+  scopes: Array<ScopeProfile>;
 }
 
-export type ToolGenerator<T> = (state: CodeState, types: typeof Babel.types) => T;
+export interface ScopeProfile {
+  id: number;
+  token: string;
+  parent: number;
+  bindings: string[];
+}

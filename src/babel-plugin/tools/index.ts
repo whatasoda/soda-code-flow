@@ -1,15 +1,8 @@
-import { ToolGenerator } from '../../types/babel-plugin/state';
-import genRegister, { Register } from './register';
-import genApply, { Apply } from './apply';
+import register from './register';
+import apply from './apply';
+import getScope from './getScope';
 
-export interface Tools {
-  apply: Apply;
-  register: Register;
-}
+export type Tools = typeof Tools;
+const Tools = { apply, register, getScope };
 
-const genTools: ToolGenerator<Tools> = (state, t) => ({
-  apply: genApply(state, t),
-  register: genRegister(state, t),
-});
-
-export default genTools;
+export default Tools;

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:babel-plugin": "tsc -p tsconfig.babel-plugin.json",
-    "asset": "babel asset/src/sample.js -o asset/dist/sample.js"
+    "asset": "babel asset/src/sample.js -o asset/dist/sample.asset.js"
   },
   "repository": {
     "type": "git",

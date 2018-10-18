@@ -1,9 +1,9 @@
+import { ScopeProfile } from '../babel-plugin/state';
+
 interface Loc {
   start: number;
   end: number;
 }
-
-
 
 export interface FunctionRole {
   isArrow: boolean;
@@ -12,6 +12,7 @@ export interface FunctionRole {
 
 export interface ProgramRole {
   code: string;
+  scopes: ScopeProfile[];
 }
 
 export interface DeclarationRole {

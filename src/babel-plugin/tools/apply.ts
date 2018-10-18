@@ -1,19 +1,19 @@
-import { ToolGenerator } from '../../types/babel-plugin/state';
 import { NodePath } from '@babel/traverse';
 import generate from '@babel/generator';
 import { parse } from '@babel/core';
 import { genObjNode } from '../util/genObjNode';
+import ToolHelper from './helper';
 
-export type Apply = () => void;
-
-const genApply: ToolGenerator<Apply> = (state, t) => () => {
+const apply = ToolHelper((
+  {state, types: t},
+) => {
   state.visited = true;
   state.allPath.slice().sort(pathSorter).forEach((path) => {
     if (path.node.type === 'Program') {
       const ast = parse([
         'module.exports = {',
         `code: ${state.stepCallee} => {${generate(path.node).code}},`,
-        `role: ${JSON.stringify(path.profile.roles.program)}`,
+        `role: ${JSON.stringify(path.profile.program)}`,
         '}',
       ].join(''));
       return ast && t.isFile(ast) ? path.replaceWith(ast.program) : null;
@@ -32,7 +32,7 @@ const genApply: ToolGenerator<Apply> = (state, t) => () => {
       )
     );
   });
-};
+});
 
 const pathSorter = (a: NodePath<any>, b: NodePath<any>): number => {
   const aStart = a.profile.start;
@@ -47,4 +47,4 @@ const pathSorter = (a: NodePath<any>, b: NodePath<any>): number => {
 };
 
 
-export default genApply;
+export default apply;

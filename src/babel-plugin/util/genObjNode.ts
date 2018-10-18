@@ -10,7 +10,7 @@ export const genObjNode = (t: typeof Babel.types, obj: object): ObjectExpression
   
   const stmt = ast.program.body[0];
   const objNode = t.isExpressionStatement(stmt) && t.isObjectExpression(stmt.expression)
-      ? stmt.expression
-      : null;
+    ? stmt.expression
+    : null;
   return objNode;
-}
+};
