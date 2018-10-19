@@ -7,15 +7,13 @@ import ToolHelper from './helper';
 const apply = ToolHelper((
   {state, types: t},
 ) => {
-  state.visited = true;
   state.allPath.slice().sort(pathSorter).forEach((path) => {
     if (path.node.type === 'Program') {
-      const ast = parse([
-        'module.exports = {',
+      const content = [
         `code: ${state.stepCallee} => {${generate(path.node).code}},`,
-        `role: ${JSON.stringify(path.profile.program)}`,
-        '}',
-      ].join(''));
+        `profile: ${JSON.stringify(path.profile.program)}`,
+      ];
+      const ast = parse(`({${content.join('')}})`);
       return ast && t.isFile(ast) ? path.replaceWith(ast.program) : null;
     };
     

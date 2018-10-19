@@ -2,7 +2,6 @@ import { NodePath, Node } from '@babel/traverse';
 
 export interface CodeState {
   stepCallee: string;
-  visited: boolean;
   allPath: Array<NodePath<Node>>;
   scopes: Array<ScopeProfile>;
 }

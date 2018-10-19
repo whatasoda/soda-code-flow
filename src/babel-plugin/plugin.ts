@@ -1,13 +1,13 @@
 import * as Babel from '@babel/core';
 import Tools from './tools';
 import { CodeState } from '../types/babel-plugin/state';
+import reset from './util/reset';
 
 
 const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
   const state: CodeState = {
     stepCallee: '$',
     allPath: [],
-    visited: false,
     scopes: [],
   };
   const ctx = { state, types };
@@ -15,6 +15,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
   return {
     visitor: {
       Program(path) {
+        reset(state);
         Tools.register(ctx, path, {
           program: {
             code: path.hub.file.code,
@@ -42,7 +43,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
             const start = id.start || 0;
             const end = id.end || 0;
             Tools.register(ctx, init, {
-              declaration: { id: { start, end } },
+              declaration: { idLocation: { start, end } },
             });
           });
       },

@@ -1,5 +1,5 @@
 import { NodePath, Node } from '@babel/traverse';
-import { FlowRoles } from '../../types/profile';
+import { CustomProfiles } from '../../types/profile';
 import { isTruthyPath } from '../util/path';
 import ToolHelper from './helper';
 import getScope from './getScope';
@@ -7,10 +7,9 @@ import getScope from './getScope';
 const register = ToolHelper((
   ctx,
   path: NodePath<Node | null>,
-  roles: FlowRoles = {}
+  profiles: CustomProfiles = {},
 ) => {
   const { state } = ctx;
-  if (state.visited) return;
   if (!isTruthyPath(path)) {
     return;
   }
@@ -19,10 +18,10 @@ const register = ToolHelper((
     const { type, start, end } = path.node;
     if (start === null || end === null) return;
     const scopeId = getScope(ctx, path).id;
-    path.profile = { type, start, end, scopeId, ...roles };
+    path.profile = { type, start, end, scopeId, ...profiles };
     state.allPath.push(path);
   } else {
-    Object.assign(path.profile, roles);
+    Object.assign(path.profile, profiles);
   }
 });
 
