@@ -2,7 +2,7 @@ import * as Babel from '@babel/core';
 import * as path from 'path';
 
 const opitons: Babel.TransformOptions = {
-  plugins: [path.resolve(__dirname, '../babel-plugin')],
+  plugins: [path.resolve(__dirname, './babel-plugin')],
 };
 
 export const transform = async (code: string) => {

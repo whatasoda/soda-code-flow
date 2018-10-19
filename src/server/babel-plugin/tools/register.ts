@@ -1,5 +1,5 @@
 import { NodePath, Node } from '@babel/traverse';
-import { CustomProfiles } from '../../types/profile';
+import { CustomProfiles } from '../../../types/profile';
 import { isTruthyPath } from '../util/path';
 import ToolHelper from './helper';
 import getScope from './getScope';

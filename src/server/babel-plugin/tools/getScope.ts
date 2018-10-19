@@ -1,4 +1,4 @@
-import { CodeState, ScopeProfile } from '../../types/babel-plugin/state';
+import { CodeState, ScopeProfile } from '../../../types/babel-plugin/state';
 import { NodePath, Scope } from '@babel/traverse';
 import ToolHelper from './helper';
 

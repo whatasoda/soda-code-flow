@@ -1,11 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDirs": ["src/babel-plugin", "src/types"],
+    "declaration": true,
+    "rootDirs": ["src/server", "src/types"],
     "outDir": "dist"
   },
   "include": [
     "src/types",
-    "src/babel-plugin"
+    "src/server"
   ]
 }

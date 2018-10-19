@@ -1,6 +1,6 @@
 import * as Babel from '@babel/core';
 import Tools from './tools';
-import { CodeState } from '../types/babel-plugin/state';
+import { CodeState } from '../../types/babel-plugin/state';
 import reset from './util/reset';
 
 

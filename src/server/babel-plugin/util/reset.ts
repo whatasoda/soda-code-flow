@@ -1,4 +1,4 @@
-import { CodeState } from '../../types/babel-plugin/state';
+import { CodeState } from '../../../types/babel-plugin/state';
 
 const reset = (state: CodeState) => {
   state.allPath.length = 0;

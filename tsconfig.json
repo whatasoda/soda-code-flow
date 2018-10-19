@@ -9,7 +9,7 @@
     "target": "es2016",
     "module": "commonjs",
     "allowJs": false,
-    "jsx": "preserve",
+    "jsx": "react",
     "sourceMap": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -19,7 +19,7 @@
     "preserveConstEnums": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types",
       "./types/modules/external"
