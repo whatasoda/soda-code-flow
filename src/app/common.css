@@ -1,0 +1,10 @@
+@import 'highlightjs/styles/hybrid.css';
+@import 'sanitize.css';
+
+textarea {
+  resize: none;
+}
+
+code.hljs {
+  padding-bottom: 1.5em;
+}

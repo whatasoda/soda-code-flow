@@ -22,7 +22,8 @@
     "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types",
-      "./types/modules/external"
+      "./types/modules/external",
+      "./types/modules/internal"
     ],
   },
   "exclude": [
