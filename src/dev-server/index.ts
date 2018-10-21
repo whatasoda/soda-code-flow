@@ -17,9 +17,9 @@ export const start = () => {
     ctx.status = status;
     ctx.response.body = body;
   });
-  router.get('/', serve(path.resolve(__dirname, '../../dist/app')));
 
   server.use(router.routes());
+  server.use(serve(path.resolve(__dirname, '../../dist/app')));
   server.listen(port, () => {
     // tslint:disable-next-line
     console.log(`Server is ready on http://localhost:${port}`);
