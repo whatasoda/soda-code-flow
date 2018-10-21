@@ -3,6 +3,7 @@ import generate from '@babel/generator';
 import { parse } from '@babel/core';
 import { genObjNode } from '../util/genObjNode';
 import ToolHelper from './helper';
+import '../../../types/profile';
 
 const apply = ToolHelper((
   {state, types: t},

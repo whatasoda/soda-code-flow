@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlowState } from '../../../../types/code-flow/state';
+import { FlowState } from '../../../code-flow/types';
 
 interface FlowHighlightProps {
   code: string;

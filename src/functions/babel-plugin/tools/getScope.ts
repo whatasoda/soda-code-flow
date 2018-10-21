@@ -1,6 +1,7 @@
 import { NodePath, Scope } from '@babel/traverse';
 import ToolHelper from './helper';
-import { CodeState, ScopeProfile } from '../types';
+import { CodeState } from '../types';
+import { ScopeProfile } from '../../../types/profile/scope';
 
 const getScope = ToolHelper((
   { state },

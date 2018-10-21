@@ -1,7 +1,7 @@
 import * as Babel from '@babel/core';
 import Tools from './tools';
-import { CodeState } from '../../types/babel-plugin/state';
 import reset from './util/reset';
+import { CodeState } from './types';
 
 
 const plugin = ({ types }: typeof Babel): Babel.PluginObj => {

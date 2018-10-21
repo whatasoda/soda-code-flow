@@ -1,4 +1,5 @@
 import { NodePath, Node } from '@babel/traverse';
+import { ScopeProfile } from '../../types/profile/scope';
 
 export interface CodeState {
   stepCallee: string;
@@ -6,9 +7,3 @@ export interface CodeState {
   scopes: Array<ScopeProfile>;
 }
 
-export interface ScopeProfile {
-  id: number;
-  token: string;
-  parent: number;
-  bindings: string[];
-}

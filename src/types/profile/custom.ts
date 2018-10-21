@@ -1,4 +1,4 @@
-import { ScopeProfile } from '../babel-plugin/state';
+import { ScopeProfile } from './scope';
 
 interface CodeLocation {
   start: number;

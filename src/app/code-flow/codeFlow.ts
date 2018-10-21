@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import register from './register';
 import { FlowProfile } from '../../types/profile';
-import { ProgramProfile } from '../../types/profile/customProfiles';
+import { ProgramProfile } from '../../types/profile/custom';
 import { FlowState } from './types';
 
 export type Resolver = <T>(profile: FlowProfile, value: T) => T;

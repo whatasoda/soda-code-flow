@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { FlowState } from '../../../../types/code-flow/state';
 import FlowHighlight from '../../molecules/FlowHighlight';
 import codeFlow from '../../../code-flow';
 import TextArea from '../../molecules/TextArea';
+import { FlowState } from '../../../code-flow/types';
 
 export interface SequencerProps {
   interval: number;

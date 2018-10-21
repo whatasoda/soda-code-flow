@@ -1,6 +1,6 @@
 import { Node } from '@babel/traverse';
-import { FunctionProfile, ProgramProfile, DeclarationProfile } from './customProfiles';
-import { ScopeProfile } from '../babel-plugin/state';
+import { FunctionProfile, ProgramProfile, DeclarationProfile } from './custom';
+import { ScopeProfile } from './scope';
 
 declare module '@babel/traverse' {
   interface NodePath<T = Node> {
