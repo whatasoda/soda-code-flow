@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { FlowState } from '../../../code-flow/types';
+import { FlowState } from '../../../code-flow';
 
 interface FlowHighlightProps {
   code: string;
-  flow: FlowState | null;
+  state: FlowState | null;
   index: number;
 }
 
-const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, flow, index }) => {
-  const { start = 0, end = 0 } = flow && flow.registry[index] ? flow.registry[index].profile : {};
-  const sample = flow && flow.registry[index] ? flow.registry[index].value : null;
+const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, state, index }) => {
+  const { start = 0, end = 0 } = state && state.flow[index] ? state.flow[index].location : {};
+  const value = state && state.flow[index] ? state.flow[index].data.value : null;
 
   // tslint:disable-next-line:no-console
-  console.log(sample);
+  console.log(value);
   return (
     <pre>
       <code>

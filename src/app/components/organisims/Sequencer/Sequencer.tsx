@@ -1,6 +1,5 @@
 import * as React from 'react';
-import codeFlow from '../../../code-flow';
-import { FlowState } from '../../../code-flow/types';
+import codeFlow, { FlowState } from '../../../code-flow';
 import FlowHighlight from '../../molecules/FlowHighlight';
 import TextArea from '../../molecules/TextArea';
 
@@ -49,7 +48,7 @@ for (let i=0; i<10; i++) {
     return (
       <React.Fragment>
         <TextArea update={this.updateInput} content={this.state.input} />
-        <FlowHighlight code={this.state.input} flow={this.state.flowState} index={this.state.index} />
+        <FlowHighlight code={this.state.input} state={this.state.flowState} index={this.state.index} />
         <button onClick={this.dispatch}>dispatch</button>
       </React.Fragment>
     );
@@ -78,7 +77,7 @@ for (let i=0; i<10; i++) {
     this.stop();
     this.timer = setInterval(() => {
       const { index, flowState } = this.state;
-      const len = flowState ? flowState.registry.length : 0;
+      const len = flowState ? flowState.flow.length : 0;
 
       if (index <= len) {
         return this.setState({ index: index + 1 });

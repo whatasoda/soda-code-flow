@@ -1,9 +1,5 @@
+import { CodeLocation } from './codeLocation';
 import { ScopeProfile } from './scope';
-
-interface CodeLocation {
-  start: number;
-  end: number;
-}
 
 export interface FunctionProfile {
   isArrow: boolean;
