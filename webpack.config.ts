@@ -11,11 +11,11 @@ module.exports = {
   entry: './src/app/index.tsx',
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/dist/app'
+    path: __dirname + '/dist/app',
   },
   devtool: dev ? 'source-map' : 'hidden-source-map',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   module: {
     rules: [
@@ -32,7 +32,7 @@ module.exports = {
               modules: true,
               sourceMap: dev,
               loaders: 1,
-            }
+            },
           },
           'postcss-loader',
         ],
@@ -55,11 +55,11 @@ module.exports = {
             },
           },
           'postcss-loader',
-        ]
-      }
-    ].filter(Boolean)
+        ],
+      },
+    ].filter(Boolean),
   },
-  
+
   plugins: [
     new CopyPlugin(['src/app/index.html']),
     new CssExtractPlugin({

@@ -1,0 +1,25 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint-react",
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "object-literal-sort-keys": false,
+    "no-namespace": [
+      true,
+      "allow-declarations"
+    ],
+    "class-name": false,
+    "no-empty-interface": false,
+    "forin": false,
+    "jsx-boolean-value": false,
+    "no-shadowed-variable": false
+  },
+  "jsRules": {}
+}

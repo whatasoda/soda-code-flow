@@ -1,8 +1,7 @@
 import * as Babel from '@babel/core';
 import Tools from './tools';
-import reset from './util/reset';
 import { CodeState } from './types';
-
+import reset from './util/reset';
 
 const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
   const state: CodeState = {
@@ -11,7 +10,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
     scopes: [],
   };
   const ctx = { state, types };
-  
+
   return {
     visitor: {
       Program(path) {
@@ -23,7 +22,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
           },
         });
       },
-      
+
       ArrowFunctionExpression(path) {
         Tools.register(ctx, path, {
           func: {
@@ -34,30 +33,28 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
           },
         });
       },
-      
+
       VariableDeclaration(path) {
-        path.get('declarations')
-          .forEach(declaration => {
-            const init = declaration.get('init');
-            const { id } = declaration.node;
-            const start = id.start || 0;
-            const end = id.end || 0;
-            Tools.register(ctx, init, {
-              declaration: { idLocation: { start, end } },
-            });
+        path.get('declarations').forEach((declaration) => {
+          const init = declaration.get('init');
+          const { id } = declaration.node;
+          const start = id.start || 0;
+          const end = id.end || 0;
+          Tools.register(ctx, init, {
+            declaration: { idLocation: { start, end } },
           });
+        });
       },
-      
+
       MemberExpression(path) {
         Tools.register(ctx, path);
         Tools.register(ctx, path.get('object'));
       },
-      
+
       CallExpression(path) {
         Tools.register(ctx, path);
-        path.get('arguments').forEach(arg => Tools.register(ctx, arg));
+        path.get('arguments').forEach((arg) => Tools.register(ctx, arg));
       },
-      
     },
     post() {
       Tools.apply(ctx);

@@ -1,6 +1,6 @@
 import * as Babel from '@babel/core';
-import { TransformProps } from './types';
 import plugin from './babel-plugin';
+import { TransformProps } from './types';
 
 const opitons: Babel.TransformOptions = {
   plugins: [plugin(Babel)],
@@ -8,12 +8,12 @@ const opitons: Babel.TransformOptions = {
 
 export const transform = async (code: string) => {
   const result = await Babel.transformAsync(code, opitons);
-  
+
   return result && result.code ? result.code : null;
-}
+};
 
 interface TransformReqest {
-  body?: TransformProps
+  body?: TransformProps;
 }
 
 interface TransformPayload {

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import FlowHighlight from '../../molecules/FlowHighlight';
 import codeFlow from '../../../code-flow';
-import TextArea from '../../molecules/TextArea';
 import { FlowState } from '../../../code-flow/types';
+import FlowHighlight from '../../molecules/FlowHighlight';
+import TextArea from '../../molecules/TextArea';
 
 export interface SequencerProps {
   interval: number;
@@ -17,7 +17,7 @@ interface SequencerState {
 
 class Sequencer extends React.Component<SequencerProps, SequencerState> {
   private timer: ReturnType<typeof setInterval> | null = null;
-  
+
   constructor(props: SequencerProps) {
     super(props);
     this.state = {
@@ -40,62 +40,60 @@ for (let i=0; i<10; i++) {
     this.prepare();
     this.start();
   }
-  
+
   public componentWillUnmount() {
     this.stop();
   }
-  
+
   public render() {
-    
-    return <React.Fragment>
-      <TextArea update={this.updateInput} content={this.state.input} />
-      <FlowHighlight code={this.state.input} flow={this.state.flowState} index={this.state.index}/>
-      <button onClick={this.dispatch}>dispatch</button>
-    </React.Fragment>
+    return (
+      <React.Fragment>
+        <TextArea update={this.updateInput} content={this.state.input} />
+        <FlowHighlight code={this.state.input} flow={this.state.flowState} index={this.state.index} />
+        <button onClick={this.dispatch}>dispatch</button>
+      </React.Fragment>
+    );
   }
-  
-  
+
   private updateInput(input: string) {
     this.setState({ input });
     this.stop();
   }
-  
+
   private updateInterval(interval: number) {
     this.setState({ interval });
   }
-  
+
   private async dispatch() {
     await this.prepare();
     this.start();
   }
-  
+
   private async prepare() {
     const flowState = await codeFlow(this.state.input);
     this.setState({ flowState });
   }
-  
-  
+
   private start() {
     this.stop();
     this.timer = setInterval(() => {
       const { index, flowState } = this.state;
       const len = flowState ? flowState.registry.length : 0;
-      
+
       if (index <= len) {
         return this.setState({ index: index + 1 });
       }
-      
+
       this.stop();
     }, this.props.interval);
   }
-  
+
   private stop() {
     if (this.timer !== null) {
       clearInterval(this.timer);
       this.setState({ index: 0 });
     }
   }
-  
 }
 
 export default Sequencer;

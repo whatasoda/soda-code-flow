@@ -1,5 +1,5 @@
 import { Node } from '@babel/traverse';
-import { FunctionProfile, ProgramProfile, DeclarationProfile } from './custom';
+import { DeclarationProfile, FunctionProfile, ProgramProfile } from './custom';
 import { ScopeProfile } from './scope';
 
 declare module '@babel/traverse' {

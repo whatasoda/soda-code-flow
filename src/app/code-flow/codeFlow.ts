@@ -1,7 +1,7 @@
 import Axios from 'axios';
-import register from './register';
 import { FlowProfile } from '../../types/profile';
 import { ProgramProfile } from '../../types/profile/custom';
+import register from './register';
 import { FlowState } from './types';
 
 export type Resolver = <T>(profile: FlowProfile, value: T) => T;
@@ -13,7 +13,7 @@ export interface EvaluatedCode {
 
 const codeFlow = async (code: string) => {
   const asset = await loadCode(code);
-  
+
   const state: FlowState = {
     code: asset.profile.code,
     identifiers: [],
@@ -25,8 +25,10 @@ const codeFlow = async (code: string) => {
 };
 
 const loadCode = async (code: string) => {
-  const transformed = await Axios.post( `${window.location.origin}/transform`, { code })
-    .then(({ data }) => data as string);
+  const transformed = await Axios.post(`${window.location.origin}/transform`, { code }).then(
+    ({ data }) => data as string,
+  );
+  // tslint:disable-next-line:no-eval
   const evaluated: EvaluatedCode = eval(transformed);
   return evaluated;
 };

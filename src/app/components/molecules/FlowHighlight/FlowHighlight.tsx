@@ -8,10 +8,10 @@ interface FlowHighlightProps {
 }
 
 const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, flow, index }) => {
-  const { start = 0, end = 0 } =
-    flow && flow.registry[index] ? flow.registry[index].profile : {};
+  const { start = 0, end = 0 } = flow && flow.registry[index] ? flow.registry[index].profile : {};
   const sample = flow && flow.registry[index] ? flow.registry[index].value : null;
-  
+
+  // tslint:disable-next-line:no-console
   console.log(sample);
   return (
     <pre>
@@ -21,7 +21,7 @@ const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, flow, index }) => 
         {code.slice(end)}
       </code>
     </pre>
-  )
+  );
 };
 
 export default FlowHighlight;

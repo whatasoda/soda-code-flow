@@ -1,12 +1,9 @@
 import { NodePath, Scope } from '@babel/traverse';
-import ToolHelper from './helper';
-import { CodeState } from '../types';
 import { ScopeProfile } from '../../../types/profile/scope';
+import { CodeState } from '../types';
+import ToolHelper from './helper';
 
-const getScope = ToolHelper((
-  { state },
-  { scope }: NodePath<any>
-) => {
+const getScope = ToolHelper(({ state }, { scope }: NodePath<any>) => {
   registerScope(state, scope);
   return state.scopes.find(Finder(scope)) || state.scopes[0];
 });
@@ -18,7 +15,7 @@ const registerScope = (state: CodeState, scope: Scope) => {
     stack.push(next);
     next = next.parent;
   }
-  
+
   while (stack.length) {
     const scope = stack.pop();
     if (!scope) {
@@ -32,7 +29,7 @@ const registerScope = (state: CodeState, scope: Scope) => {
   }
 };
 
-const Finder = (scope: Scope) => (state: ScopeProfile) => (state.token === tokenize(scope));
+const Finder = (scope: Scope) => (state: ScopeProfile) => state.token === tokenize(scope);
 const tokenize = (scope: Scope) => `${scope.block.start}-${scope.block.end}`;
 
 export default getScope;

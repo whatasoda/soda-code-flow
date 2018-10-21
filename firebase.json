@@ -2,6 +2,7 @@
   "functions": {
     "source": "dist/functions",
     "predeploy": [
+      "npm run check",
       "npm run build"
     ]
   },

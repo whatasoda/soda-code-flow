@@ -7,7 +7,7 @@ interface CodeLocation {
 
 export interface FunctionProfile {
   isArrow: boolean;
-  args: Array<CodeLocation>;
+  args: CodeLocation[];
 }
 
 export interface ProgramProfile {
