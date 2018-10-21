@@ -1,12 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "rootDirs": ["src/server", "src/types"],
+    "rootDirs": ["src/functions", "src/types"],
     "outDir": "dist"
   },
   "include": [
     "src/types",
-    "src/server"
+    "src/functions"
   ]
 }

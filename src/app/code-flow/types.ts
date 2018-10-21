@@ -1,4 +1,4 @@
-import { FlowProfile } from '../profile';
+import { FlowProfile } from '../../types/profile';
 
 export interface FlowItem {
   profile: FlowProfile;

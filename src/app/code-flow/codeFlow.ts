@@ -2,7 +2,7 @@ import Axios from 'axios';
 import register from './register';
 import { FlowProfile } from '../../types/profile';
 import { ProgramProfile } from '../../types/profile/customProfiles';
-import { FlowState } from '../../types/code-flow/state';
+import { FlowState } from './types';
 
 export type Resolver = <T>(profile: FlowProfile, value: T) => T;
 
@@ -25,7 +25,7 @@ const codeFlow = async (code: string) => {
 };
 
 const loadCode = async (code: string) => {
-  const transformed = await Axios.post('http://localhost:3000/transform', { code })
+  const transformed = await Axios.post( `${window.location.origin}/transform`, { code })
     .then(({ data }) => data as string);
   const evaluated: EvaluatedCode = eval(transformed);
   return evaluated;

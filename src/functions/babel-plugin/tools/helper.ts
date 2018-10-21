@@ -1,5 +1,5 @@
 import * as Babel from '@babel/core';
-import { CodeState } from '../../../types/babel-plugin/state';
+import { CodeState } from '../types';
 
 export interface ToolContext {
   state: CodeState;

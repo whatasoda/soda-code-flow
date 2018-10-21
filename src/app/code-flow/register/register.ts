@@ -1,6 +1,6 @@
-import { FlowState } from '../../../types/code-flow/state';
 import { FlowProfile } from '../../../types/profile';
 import { isIdentifierCode, getThisArgCode } from '../util/identifier';
+import { FlowState } from '../types';
 
 const register = <T>(state: FlowState, profile: FlowProfile, value: T): T => {
   state.registry.push({ profile, value });

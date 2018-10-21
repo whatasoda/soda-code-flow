@@ -1,7 +1,11 @@
-const CopyPlugin = require('copy-webpack-plugin');
-const CssExtractPlugin = require('mini-css-extract-plugin');
+import CopyPlugin = require('copy-webpack-plugin');
+import CssExtractPlugin = require('mini-css-extract-plugin');
 
 const dev = process.env.NODE_ENV !== 'production';
+
+if (dev) {
+  import('./src/dev-server').then(({ start }) => start());
+}
 
 module.exports = {
   entry: './src/app/index.tsx',
@@ -16,9 +20,9 @@ module.exports = {
   module: {
     rules: [
       { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
-      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+      dev && { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       {
-        test: /\.css/,
+        test: /\.css$/,
         exclude: /common\.css$/,
         use: [
           CssExtractPlugin.loader,
@@ -26,15 +30,15 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              minimize: !dev,
               sourceMap: dev,
+              loaders: 1,
             }
           },
           'postcss-loader',
         ],
       },
       {
-        test: /common\.css/,
+        test: /common\.css$/,
         use: [
           {
             loader: 'file-loader',
@@ -46,14 +50,14 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              minimize: !dev,
               sourceMap: dev,
+              loaders: 1,
             },
           },
           'postcss-loader',
         ]
       }
-    ]
+    ].filter(Boolean)
   },
   
   plugins: [

@@ -1,0 +1,21 @@
+{
+  "functions": {
+    "source": "dist/functions",
+    "predeploy": [
+      "npm run build"
+    ]
+  },
+  "hosting": {
+    "public": "dist/app",
+    "ignore": [
+      "firebase.json",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/transform",
+        "function": "transform"
+      }
+    ]
+  }
+}
