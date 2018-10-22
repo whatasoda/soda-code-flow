@@ -3,3 +3,4 @@ dist
 .firebase
 *.log
 memo.txt
+.DS_Store
