@@ -13,7 +13,7 @@ const apply = ToolHelper(({ state, types: t }) => {
       if (path.node.type === 'Program') {
         const content = [
           `code: ${state.stepCallee} => {${generate(path.node).code}},`,
-          `profile: ${JSON.stringify(path.profile.program)}`,
+          `profile: ${JSON.stringify(path.profile.prog)}`,
         ];
         const ast = parse(`({${content.join('')}})`);
         return ast && t.isFile(ast) ? path.replaceWith(ast.program) : null;
@@ -30,10 +30,8 @@ const apply = ToolHelper(({ state, types: t }) => {
 });
 
 const pathSorter = (a: NodePath<any>, b: NodePath<any>): number => {
-  const aStart = a.profile.start;
-  const aEnd = a.profile.end;
-  const bStart = b.profile.start;
-  const bEnd = b.profile.end;
+  const [aStart, aEnd] = a.profile.loc;
+  const [bStart, bEnd] = b.profile.loc;
 
   return aStart <= bStart && aEnd >= bEnd ? 1 : aStart >= bStart && aEnd <= bEnd ? -1 : aStart - bStart;
 };

@@ -1,4 +1,5 @@
 import * as Babel from '@babel/core';
+import { CodeLocation } from '../../types/profile/codeLocation';
 import Tools from './tools';
 import { CodeState } from './types';
 import reset from './util/reset';
@@ -16,7 +17,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
       Program(path) {
         reset(state);
         Tools.register(ctx, path, {
-          program: {
+          prog: {
             code: path.hub.file.code,
             scopes: state.scopes,
           },
@@ -27,9 +28,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
         Tools.register(ctx, path, {
           func: {
             isArrow: true,
-            args: path.node.params
-              .map(({ start, end }) => [start || 0, end || 0])
-              .map(([start, end]) => ({ start, end })),
+            args: path.node.params.map<CodeLocation>(({ start, end }) => [start || 0, end || 0]),
           },
         });
       },
@@ -41,7 +40,7 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
           const start = id.start || 0;
           const end = id.end || 0;
           Tools.register(ctx, init, {
-            declaration: { idLocation: { start, end } },
+            decl: { id: [start, end] },
           });
         });
       },

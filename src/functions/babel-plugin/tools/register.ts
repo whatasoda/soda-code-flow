@@ -11,12 +11,12 @@ const register = ToolHelper((ctx, path: NodePath<Node | null>, profiles: CustomP
   }
 
   if (!path.profile) {
-    const { type, start, end } = path.node;
+    const { start, end } = path.node;
     if (start === null || end === null) {
       return;
     }
-    const scopeId = getScope(ctx, path).id;
-    path.profile = { type, start, end, scopeId, ...profiles };
+    const scope = getScope(ctx, path).id;
+    path.profile = { scope, loc: [start, end], ...profiles };
     state.allPath.push(path);
   } else {
     Object.assign(path.profile, profiles);

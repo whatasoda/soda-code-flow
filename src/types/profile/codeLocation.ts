@@ -1,4 +1,1 @@
-export interface CodeLocation {
-  start: number;
-  end: number;
-}
+export type CodeLocation = [number, number];

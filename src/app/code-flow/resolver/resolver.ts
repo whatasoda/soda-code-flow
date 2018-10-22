@@ -5,12 +5,12 @@ export type Resolver = <T>(profile: FlowProfile, value: T) => T;
 
 const createResolver = (state: FlowState): Resolver => (profile, value) => {
   state.updateIdentifier(profile, value);
-  state.updateValue(profile, value);
-  state.pushFlow(profile, value);
+  state.updateValue(profile.loc, value);
+  state.pushFlow(profile.loc, value);
 
   if (typeof value === 'function') {
     const func: (...args: any[]) => any = value as any;
-    const thisArg = state.getThisArg(profile);
+    const thisArg = state.getThisArg(profile.loc);
 
     const wrapped = function(this: any, ...args: any[]) {
       if (profile.func) {
@@ -20,7 +20,7 @@ const createResolver = (state: FlowState): Resolver => (profile, value) => {
       const result = func.apply(this || thisArg || undefined, args);
 
       if (profile.func) {
-        state.pushFlow(profile, result);
+        state.pushFlow(profile.loc, result);
       }
       return result;
     };

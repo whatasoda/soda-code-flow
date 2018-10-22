@@ -1,15 +1,25 @@
 import * as Babel from '@babel/core';
+import * as pako from 'pako';
+import * as uglify from 'uglify-es';
+import { FlowContent, TransformProps } from '../types/flowContent';
 import plugin from './babel-plugin';
-import { TransformProps } from './types';
 
 const opitons: Babel.TransformOptions = {
   plugins: [plugin(Babel)],
 };
 
-export const transform = async (code: string) => {
-  const result = await Babel.transformAsync(code, opitons);
+const prefix = 'const _=';
+export const transform = async (source: string) => {
+  const babelResult = await Babel.transformAsync(source, opitons);
 
-  return result && result.code ? result.code : null;
+  if (!(babelResult && babelResult.code)) {
+    return null;
+  }
+  const transformed = babelResult.code;
+  const uglifyResult = uglify.minify(prefix + transformed);
+  const minified = uglifyResult.code.slice(prefix.length, -1);
+
+  return `(${minified})`;
 };
 
 interface TransformReqest {
@@ -23,11 +33,11 @@ interface TransformPayload {
 
 export const resolveTransform = async (req: TransformReqest): Promise<TransformPayload> => {
   if (req.body) {
-    const params: TransformProps = req.body;
-    if (params.code) {
-      const result = await transform(params.code);
-      if (result) {
-        const body = result;
+    const { source, ctx }: TransformProps = req.body;
+    if (source) {
+      const transformed = await transform(source);
+      if (transformed) {
+        const body = format({ transformed, ctx });
         const status = 200;
         return { body, status };
       }
@@ -36,4 +46,10 @@ export const resolveTransform = async (req: TransformReqest): Promise<TransformP
   const body = 'bad request';
   const status = 400;
   return { body, status };
+};
+
+const format = (content: FlowContent<any>) => {
+  const deflated = pako.deflate(JSON.stringify(content), { to: 'string' });
+  const base64 = Buffer.from(deflated, 'binary').toString('base64');
+  return base64;
 };

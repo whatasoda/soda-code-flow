@@ -30,11 +30,11 @@ class FlowState {
     this.ctx = ctx;
   }
 
-  public pushFlow({ start, end }: CodeLocation, value: any) {
+  public pushFlow([start, end]: CodeLocation, value: any) {
     const snapshot = this.identifierSnapshot();
     const data = format({ value, snapshot });
     this.flow.push({
-      location: { start, end },
+      location: [start, end],
       data: JSON.parse(JSON.stringify(data)),
     });
   }
@@ -49,12 +49,12 @@ class FlowState {
   }
 
   public updateIdentifier(profile: FlowProfile, value: any) {
-    const code = this.getCode(profile);
+    const code = this.getCode(profile.loc);
     if (!isIdentifierCode(code)) {
       return;
     }
 
-    let scope = this.scopes[profile.scopeId];
+    let scope = this.scopes[profile.scope];
     while (scope) {
       if (scope.bindings.includes(code)) {
         this.identifiers[scope.id][code] = value;
@@ -74,7 +74,7 @@ class FlowState {
     );
   }
 
-  private getCode({ start, end }: CodeLocation) {
+  private getCode([start, end]: CodeLocation) {
     return this.code.slice(start, end);
   }
 }

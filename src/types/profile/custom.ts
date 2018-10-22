@@ -12,5 +12,5 @@ export interface ProgramProfile {
 }
 
 export interface DeclarationProfile {
-  idLocation: CodeLocation;
+  id: CodeLocation;
 }

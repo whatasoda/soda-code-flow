@@ -1,14 +1,13 @@
 import Axios from 'axios';
+import * as pako from 'pako';
+import { FlowContent, TransformProps } from '../../types/flowContent';
 import { ProgramProfile } from '../../types/profile/custom';
 import createResolver, { Resolver } from './resolver/resolver';
 import FlowState from './state';
 import { CustomContext } from './state/state';
 
 export interface TransformedCode {
-  content: {
-    transformed: string;
-    ctx: CustomContext;
-  };
+  content: FlowContent<CustomContext>;
   base64: string;
 }
 
@@ -17,28 +16,31 @@ export interface EvaluatedCode {
   profile: ProgramProfile;
 }
 
-const codeFlow = async (source: string, ctx: CustomContext) => {
+const codeFlow = async (props: TransformProps | string) => {
   const {
-    content: { transformed },
-  } = await transform(source, ctx);
+    content: { transformed, ctx },
+    base64,
+  } = await transform(props);
+
   const { code, profile } = evaluate(transformed);
 
   const state = new FlowState(profile, ctx);
   const resolver = createResolver(state);
 
   code(resolver);
-  return state;
+  return { state, base64 };
+};
+
+const transform = async (props: TransformProps | string): Promise<TransformedCode> => {
+  const base64 = typeof props === 'string' ? props : await fetchContent(props);
+  const content = parse(base64);
+  return { content, base64 };
 };
 
 const url = `${window.location.origin}/transform`;
-const transform = async (source: string, ctx: CustomContext): Promise<TransformedCode> => {
-  const transformed = await Axios.post(url, { code: source }).then(({ data }) => data as string);
+const fetchContent = (props: TransformProps) => Axios.post(url, props).then(({ data }) => data as string);
 
-  return {
-    content: { transformed, ctx },
-    base64: '',
-  };
-};
+const parse = (base64: string): FlowContent<CustomContext> => JSON.parse(pako.inflate(atob(base64), { to: 'string' }));
 
 // tslint:disable-next-line:no-eval
 const evaluate = (transformed: string): EvaluatedCode => eval(transformed);

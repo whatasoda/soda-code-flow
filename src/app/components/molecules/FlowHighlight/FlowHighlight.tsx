@@ -8,7 +8,7 @@ interface FlowHighlightProps {
 }
 
 const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, state, index }) => {
-  const { start = 0, end = 0 } = state && state.flow[index] ? state.flow[index].location : {};
+  const [s = 0, e = 0] = state && state.flow[index] ? state.flow[index].location : [];
   const value = state && state.flow[index] ? state.flow[index].data.value : null;
 
   // tslint:disable-next-line:no-console
@@ -16,9 +16,9 @@ const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, state, index }) =>
   return (
     <pre>
       <code>
-        {code.slice(0, start)}
-        <span style={{ color: '#f00' }}>{code.slice(start, end)}</span>
-        {code.slice(end)}
+        {code.slice(0, s)}
+        <span style={{ color: '#f00' }}>{code.slice(s, e)}</span>
+        {code.slice(e)}
       </code>
     </pre>
   );

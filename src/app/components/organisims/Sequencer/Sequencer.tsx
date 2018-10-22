@@ -12,6 +12,7 @@ interface SequencerState {
   index: number;
   input: string;
   flowState: FlowState | null;
+  base64: string;
 }
 
 class Sequencer extends React.Component<SequencerProps, SequencerState> {
@@ -29,6 +30,7 @@ for (let i=0; i<10; i++) {
 }
 `,
       flowState: null,
+      base64: '',
     };
     this.updateInput = this.updateInput.bind(this);
     this.updateInterval = this.updateInterval.bind(this);
@@ -69,10 +71,15 @@ for (let i=0; i<10; i++) {
   }
 
   private async prepare() {
-    const flowState = await codeFlow(this.state.input, {
-      watch: ['lower'],
+    const source = this.state.input;
+    const { state: flowState, base64 } = await codeFlow({
+      source,
+      ctx: {
+        watch: ['lower'],
+      },
     });
-    this.setState({ flowState });
+
+    this.setState({ flowState, base64 });
   }
 
   private start() {

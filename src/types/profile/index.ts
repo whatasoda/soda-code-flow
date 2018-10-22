@@ -1,4 +1,4 @@
-import { Node } from '@babel/traverse';
+import { CodeLocation } from './codeLocation';
 import { DeclarationProfile, FunctionProfile, ProgramProfile } from './custom';
 import { ScopeProfile } from './scope';
 
@@ -9,14 +9,12 @@ declare module '@babel/traverse' {
 }
 
 export interface FlowProfile extends CustomProfiles {
-  type: Node['type'];
-  start: number;
-  end: number;
-  scopeId: ScopeProfile['id'];
+  loc: CodeLocation;
+  scope: ScopeProfile['id'];
 }
 
 export interface CustomProfiles {
   func?: FunctionProfile;
-  program?: ProgramProfile;
-  declaration?: DeclarationProfile;
+  prog?: ProgramProfile;
+  decl?: DeclarationProfile;
 }
