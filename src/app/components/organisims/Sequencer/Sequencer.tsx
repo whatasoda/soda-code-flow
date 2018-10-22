@@ -69,7 +69,9 @@ for (let i=0; i<10; i++) {
   }
 
   private async prepare() {
-    const flowState = await codeFlow(this.state.input);
+    const flowState = await codeFlow(this.state.input, {
+      watch: ['lower'],
+    });
     this.setState({ flowState });
   }
 

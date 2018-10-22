@@ -4,30 +4,35 @@ import { ProgramProfile } from '../../../types/profile/custom';
 import { ScopeProfile } from '../../../types/profile/scope';
 import { getThisArgCode, isIdentifierCode } from '../util/identifier';
 import { FlowData, format } from './data';
-
-interface ValueContainer {
-  [code: string]: any;
-}
+import { ValueContainer } from './types';
 
 export interface FlowItem {
   location: CodeLocation;
   data: FlowData;
 }
 
+export interface CustomContext {
+  watch: string[];
+}
+
 class FlowState {
   public code: string;
   public flow: FlowItem[] = [];
-  public scopes: ScopeProfile[] = [];
+  public scopes: ScopeProfile[];
   public values: ValueContainer = {};
   public identifiers: ValueContainer[];
+  public ctx: CustomContext;
 
-  constructor({ code, scopes }: ProgramProfile) {
+  constructor({ code, scopes }: ProgramProfile, ctx: CustomContext) {
     this.code = code;
+    this.scopes = scopes;
     this.identifiers = scopes.map(() => ({}));
+    this.ctx = ctx;
   }
 
   public pushFlow({ start, end }: CodeLocation, value: any) {
-    const data = format({ value });
+    const snapshot = this.identifierSnapshot();
+    const data = format({ value, snapshot });
     this.flow.push({
       location: { start, end },
       data: JSON.parse(JSON.stringify(data)),
@@ -57,6 +62,16 @@ class FlowState {
       }
       scope = this.scopes[scope.parent];
     }
+  }
+
+  private identifierSnapshot() {
+    return this.ctx.watch.reduce<ValueContainer>(
+      (container, key) => ({
+        ...container,
+        [key]: this.identifiers[0][key],
+      }),
+      {},
+    );
   }
 
   private getCode({ start, end }: CodeLocation) {
