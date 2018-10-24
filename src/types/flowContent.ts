@@ -3,7 +3,7 @@ export interface FlowContent<TContext> {
   ctx: TContext;
 }
 
-export interface TransformProps {
-  source?: string;
-  ctx: any;
+export interface TransformProps<TContext = any> {
+  source: string | undefined;
+  ctx: TContext;
 }

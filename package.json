@@ -45,6 +45,7 @@
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
     "@types/react-highlight": "^0.12.1",
+    "@types/react-redux": "^6.0.9",
     "@types/uglify-es": "^3.0.0",
     "@types/webpack": "^4.4.17",
     "awesome-typescript-loader": "^5.2.1",
@@ -89,6 +90,8 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-highlight": "^0.12.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.1",
     "sanitize.css": "^8.0.0",
     "uglify-es": "^3.3.9"
   },

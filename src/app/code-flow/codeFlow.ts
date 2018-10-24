@@ -16,7 +16,9 @@ export interface EvaluatedCode {
   profile: ProgramProfile;
 }
 
-const codeFlow = async (props: TransformProps | string) => {
+export type CodeFlowPayload = ReturnType<typeof codeFlow> extends Promise<infer T> ? T : never;
+
+const codeFlow = async <TContext = any>(props: TransformProps<TContext> | string) => {
   const {
     content: { transformed, ctx },
     base64,

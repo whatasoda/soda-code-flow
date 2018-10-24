@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import App from './app';
 import './common.css';
-import Sequencer from './components/organisims/Sequencer';
 
-ReactDOM.render(<Sequencer interval={300} />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));
