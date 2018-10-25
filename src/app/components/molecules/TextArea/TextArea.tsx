@@ -9,7 +9,7 @@ const s = styleHelper(style);
 type Updater = (input: string) => void;
 interface TextAreaProps {
   update: Updater;
-  content: string;
+  code: string;
 }
 
 class TextArea extends React.Component<TextAreaProps, { row: number; col: number }> {
@@ -44,21 +44,25 @@ class TextArea extends React.Component<TextAreaProps, { row: number; col: number
   }
 
   public render() {
-    const { content } = this.props;
+    const { code } = this.props;
     return (
-      <div className={s('container')}>
-        <Highlight className="js">{content}</Highlight>
-        <pre className={s('input-container')}>
-          <code className={s('input-container')}>
-            <TextCursor col={this.state.col} row={this.state.row} />
-            <textarea
-              ref={(elem) => (this.area = elem)}
-              className={s('input')}
-              value={content}
-              onChange={this.onChange}
-            />
-          </code>
-        </pre>
+      <div className={s('layout')}>
+        <div className={s('container')}>
+          <div className={s('scroll-box')}>
+            <Highlight className="js">{code}</Highlight>
+            <pre>
+              <code className={s('input-container')}>
+                <TextCursor col={this.state.col} row={this.state.row} />
+                <textarea
+                  ref={(elem) => (this.area = elem)}
+                  className={s('input')}
+                  value={code}
+                  onChange={this.onChange}
+                />
+              </code>
+            </pre>
+          </div>
+        </div>
       </div>
     );
   }
@@ -68,15 +72,15 @@ class TextArea extends React.Component<TextAreaProps, { row: number; col: number
   }
 
   private updateCursor(position: number) {
-    const { content } = this.props;
-    if (position > content.length) {
+    const { code } = this.props;
+    if (position > code.length) {
       return;
     }
 
     let row = 0;
     let curr = 0;
     while (curr <= position) {
-      const next = content.indexOf('\n', curr);
+      const next = code.indexOf('\n', curr);
       if (next === -1 || next >= position) {
         const col = position - curr;
         return this.setState({ row, col });

@@ -38,7 +38,7 @@ class Sequencer extends React.Component<SequencerProps, SequencerState> {
     const item = this.props.flowState && this.props.flowState.flow[this.props.step];
     return (
       <React.Fragment>
-        <TextArea update={this.props.setCode} content={this.props.code} />
+        <TextArea update={this.props.setCode} code={this.props.code} />
         <FlowHighlight code={this.props.code} item={item} />
         <button onClick={this.dispatch}>dispatch</button>
       </React.Fragment>
