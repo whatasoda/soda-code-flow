@@ -6,15 +6,18 @@ export interface FetchCodeFlowProps {
   code: string;
   watch: string[];
   assignCodeFlow: ActionCreatorsMap['flow']['assignCodeFlow'];
+  setStatus: ActionCreatorsMap['flow']['setStatus'];
 }
 
 const fetchCodeFlow = async ({ props }: TaskContext<FetchCodeFlowProps>) => {
-  const { code, watch, assignCodeFlow } = props;
+  const { code, watch, assignCodeFlow, setStatus } = props;
+  setStatus('fetching');
   const codeFlowPayload = await codeFlow<CustomContext>({
     source: code,
     ctx: { watch },
   });
   assignCodeFlow(codeFlowPayload);
+  setStatus('ready');
 };
 
 export default fetchCodeFlow;

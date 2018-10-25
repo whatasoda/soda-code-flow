@@ -14,8 +14,8 @@ const CSequencer = ReactRedux.connect<StateProps, DispatchProps, {}, State>(
   },
   (dispatch) => {
     const { flow } = actionCreators;
-    const { assignCodeFlow, setStep, setStatus, setCode } = flow;
-    return wrapAll(dispatch, { assignCodeFlow, setStep, setStatus, setCode });
+    const { assignCodeFlow, setStep, setStatus } = flow;
+    return wrapAll(dispatch, { assignCodeFlow, setStep, setStatus });
   },
 )(Sequencer);
 

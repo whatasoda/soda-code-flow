@@ -1,0 +1,10 @@
+.button {
+  display: block;
+  width: fit-content;
+  height: fit-content;
+  padding: 0 0.6rem;
+}
+
+.inavailable {
+  opacity: 0.5;
+}

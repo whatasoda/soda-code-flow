@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  grid-template-areas: 'buttons bar';
+  grid-template-columns: 40rem 1fr;
+  padding: 0 0.8rem;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  padding: 1.6rem;
+}

@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { FlowState } from '../../../code-flow';
-import { ActionCreatorsMap, State } from '../../../store';
-import fetchCodeFlow, { FetchCodeFlowProps } from '../../../tasks/fetchCodeFlow';
+import { FetchCodeFlowProps } from '../../../tasks/fetchCodeFlow';
 import startSequence, { SequenceProps, SequenceState } from '../../../tasks/sequence';
+import styleHelper from '../../../util/styleHelper';
+import { Fetch, PlayPause } from '../../atoms/ControllButtons';
+import style = require('./Sequencer.css');
 
-export interface SequencerProps extends SequenceProps, FetchCodeFlowProps {
-  status: State['flow']['status'];
-  flowState: FlowState | null;
-  step: number;
-  code: string;
-  setStatus: ActionCreatorsMap['flow']['setStatus'];
-  setCode: ActionCreatorsMap['flow']['setCode'];
-}
+const s = styleHelper(style);
+
+export interface SequencerProps extends SequenceProps, FetchCodeFlowProps {}
 
 interface SequencerState extends SequenceState {}
 
@@ -21,7 +17,6 @@ class Sequencer extends React.Component<SequencerProps, SequencerState> {
     this.state = {
       alive: true,
     };
-    this.dispatch = this.dispatch.bind(this);
   }
 
   public componentDidMount() {
@@ -34,15 +29,14 @@ class Sequencer extends React.Component<SequencerProps, SequencerState> {
 
   public render() {
     return (
-      <React.Fragment>
-        <button onClick={this.dispatch}>dispatch</button>
-      </React.Fragment>
+      <div className={s(['container'])}>
+        <div className={s(['buttons'])}>
+          <Fetch {...this.props} />
+          <PlayPause {...this.props} />
+        </div>
+        <div>aa</div>
+      </div>
     );
-  }
-
-  private async dispatch() {
-    await fetchCodeFlow(this);
-    this.props.setStatus('running');
   }
 }
 

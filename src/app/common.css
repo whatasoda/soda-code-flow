@@ -1,5 +1,10 @@
 @import 'highlightjs/styles/hybrid.css';
 @import 'sanitize.css';
+@import 'icomoon.css';
+
+html {
+  font-size: 62.5%;
+}
 
 html, body, #app {
   width: 100%;
@@ -11,4 +16,9 @@ html, body, #app {
 
 pre {
   margin: 0;
+  font-size: 1.6rem;
+}
+
+a {
+  text-decoration: none;
 }
