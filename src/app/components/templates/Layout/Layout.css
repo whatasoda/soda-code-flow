@@ -1,0 +1,35 @@
+.layout {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'code .'
+    'code .'
+    'sequencer sequencer';
+  grid-auto-rows: 50px 1fr 1fr 50px;
+  grid-auto-columns: 1fr 1fr;
+}
+
+@media screen and (max-width: 800px) {
+  .layout {
+    grid-template-areas:
+      'header header'
+      'code code'
+      '. .'
+      'sequencer sequencer';
+  }
+}
+
+
+.layout>*:nth-child(1) {
+  grid-area: header;
+}
+
+.layout>*:nth-child(2) {
+  grid-area: code;
+}
+
+.layout>*:nth-child(3) {
+  grid-area: sequencer;
+}

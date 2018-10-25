@@ -7,7 +7,7 @@ import { DispatchPropsOf, StatePropsOf } from './types';
 type StateProps = StatePropsOf<SequencerProps>;
 type DispatchProps = DispatchPropsOf<SequencerProps>;
 
-const SequencerContainer = ReactRedux.connect<StateProps, DispatchProps, {}, State>(
+const CSequencer = ReactRedux.connect<StateProps, DispatchProps, {}, State>(
   ({ flow }) => {
     const { status, code, flowState, interval, step, loop, lifespan, watch } = flow;
     return { status, code, flowState, interval, step, loop, lifespan, watch };
@@ -19,4 +19,4 @@ const SequencerContainer = ReactRedux.connect<StateProps, DispatchProps, {}, Sta
   },
 )(Sequencer);
 
-export default SequencerContainer;
+export default CSequencer;

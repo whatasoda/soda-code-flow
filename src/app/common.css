@@ -9,10 +9,6 @@ html, body, #app {
   overflow: hidden;
 }
 
-code.hljs {
-  padding-bottom: 1.5em;
-}
-
 pre {
   margin: 0;
 }

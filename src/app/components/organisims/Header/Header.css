@@ -1,0 +1,12 @@
+.container {
+  background-color: #3f4448;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  padding: 0 10px;
+}
+
+.head {
+  color: #dddddd;
+  margin: 0;
+  line-height: 50px;
+}

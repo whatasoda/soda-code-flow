@@ -1,42 +1,36 @@
 import * as React from 'react';
-import Highlight from 'react-highlight';
+import { ActionCreatorsMap } from '../../../store';
 import styleHelper from '../../../util/styleHelper';
-import TextCursor from '../../atoms/TextCursor';
-import style = require('./style.css');
+import CodeDeco from '../../atoms/CodeDeco';
+import style = require('./TextArea.css');
 
 const s = styleHelper(style);
 
-type Updater = (input: string) => void;
-interface TextAreaProps {
-  update: Updater;
+export interface TextAreaProps {
   code: string;
+  cursor: number;
+  start: number;
+  end: number;
+  isFocused: boolean;
+  setCursor: ActionCreatorsMap['textarea']['setCursor'];
+  setFocus: ActionCreatorsMap['textarea']['setFocus'];
+  setCode: ActionCreatorsMap['flow']['setCode'];
 }
 
-class TextArea extends React.Component<TextAreaProps, { row: number; col: number }> {
+class TextArea extends React.Component<TextAreaProps> {
   private area: HTMLTextAreaElement | null = null;
   private alive: boolean = false;
 
   constructor(props: TextAreaProps) {
     super(props);
-    this.state = { col: 0, row: 0 };
     this.onChange = this.onChange.bind(this);
-    this.updateCursor = this.updateCursor.bind(this);
+    this.watchCursor = this.watchCursor.bind(this);
+    this.refArea = this.refArea.bind(this);
   }
 
   public componentDidMount() {
     this.alive = true;
-    let prev = 0;
-    const watch = () => {
-      if (this.area && this.alive) {
-        const position = this.area.selectionStart;
-        if (prev !== position) {
-          prev = position;
-          this.updateCursor(position);
-        }
-        requestAnimationFrame(watch);
-      }
-    };
-    watch();
+    this.watchCursor();
   }
 
   public componentWillUnmount() {
@@ -44,49 +38,36 @@ class TextArea extends React.Component<TextAreaProps, { row: number; col: number
   }
 
   public render() {
-    const { code } = this.props;
+    const { code, start, end, cursor, isFocused } = this.props;
     return (
-      <div className={s('layout')}>
-        <div className={s('container')}>
-          <div className={s('scroll-box')}>
-            <Highlight className="js">{code}</Highlight>
-            <pre>
-              <code className={s('input-container')}>
-                <TextCursor col={this.state.col} row={this.state.row} />
-                <textarea
-                  ref={(elem) => (this.area = elem)}
-                  className={s('input')}
-                  value={code}
-                  onChange={this.onChange}
-                />
-              </code>
-            </pre>
-          </div>
-        </div>
-      </div>
+      <React.Fragment>
+        {isFocused && (
+          <React.Fragment>
+            <CodeDeco {...{ code, start, end }} className={s(['selection'])} />
+            <CodeDeco {...{ code }} start={cursor} end={cursor + 1} className={s(['cursor'])} />
+          </React.Fragment>
+        )}
+        <textarea ref={this.refArea} className={s(['text'])} value={code} onChange={this.onChange} />
+      </React.Fragment>
     );
   }
 
   private onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.props.update(e.target.value);
+    this.props.setCode(e.target.value);
   }
 
-  private updateCursor(position: number) {
-    const { code } = this.props;
-    if (position > code.length) {
-      return;
-    }
+  private refArea(elem: HTMLTextAreaElement | null) {
+    this.area = elem;
+  }
 
-    let row = 0;
-    let curr = 0;
-    while (curr <= position) {
-      const next = code.indexOf('\n', curr);
-      if (next === -1 || next >= position) {
-        const col = position - curr;
-        return this.setState({ row, col });
+  private watchCursor() {
+    if (this.area && this.alive) {
+      this.props.setCursor(this.area);
+      const isFocused = document.activeElement === this.area;
+      if (isFocused !== this.props.isFocused) {
+        this.props.setFocus(isFocused);
       }
-      curr = next + 1;
-      row++;
+      requestAnimationFrame(this.watchCursor);
     }
   }
 }
