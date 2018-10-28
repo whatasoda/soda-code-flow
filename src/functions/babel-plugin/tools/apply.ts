@@ -1,7 +1,6 @@
 import { parse } from '@babel/core';
 import generate from '@babel/generator';
 import { NodePath } from '@babel/traverse';
-import '../../../types/profile';
 import { genObjNode } from '../util/genObjNode';
 import ToolHelper from './helper';
 
