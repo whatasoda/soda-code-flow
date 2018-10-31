@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FetchCodeFlowProps } from '../../../tasks/fetchCodeFlow';
 import startSequence, { SequenceProps, SequenceState } from '../../../tasks/sequence';
 import styleHelper from '../../../util/styleHelper';
-import { Fetch, PlayPause } from '../../atoms/ControllButtons';
+import { Fetch, PlayPause, Tweak } from '../../atoms/ControllButtons';
 import style = require('./Sequencer.css');
 
 const s = styleHelper(style);
@@ -32,7 +32,9 @@ class Sequencer extends React.Component<SequencerProps, SequencerState> {
       <div className={s(['container'])}>
         <div className={s(['buttons'])}>
           <Fetch {...this.props} />
+          <Tweak {...this.props} direction={-1} />
           <PlayPause {...this.props} />
+          <Tweak {...this.props} direction={1} />
         </div>
         <div>aa</div>
       </div>
