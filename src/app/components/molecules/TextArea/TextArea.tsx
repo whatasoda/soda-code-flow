@@ -1,40 +1,38 @@
 import * as React from 'react';
-import { ActionCreatorsMap } from '../../../store';
+import { setCode, SetCodeProps, watchCursor, WatchCursorContext, WatchCursorProps } from '../../../tasks/textarea';
 import styleHelper from '../../../util/styleHelper';
 import CodeDeco from '../../atoms/CodeDeco';
 import style = require('./TextArea.css');
 
 const s = styleHelper(style);
 
-export interface TextAreaProps {
+export interface TextAreaProps extends SetCodeProps, WatchCursorProps {
   code: string;
   cursor: number;
   start: number;
   end: number;
   isFocused: boolean;
-  setCursor: ActionCreatorsMap['textarea']['setCursor'];
-  setFocus: ActionCreatorsMap['textarea']['setFocus'];
-  setCode: ActionCreatorsMap['flow']['setCode'];
 }
 
 class TextArea extends React.Component<TextAreaProps> {
-  private area: HTMLTextAreaElement | null = null;
-  private alive: boolean = false;
+  private ctx: WatchCursorContext = {
+    area: null,
+    alive: false,
+  };
 
   constructor(props: TextAreaProps) {
     super(props);
     this.onChange = this.onChange.bind(this);
-    this.watchCursor = this.watchCursor.bind(this);
     this.refArea = this.refArea.bind(this);
   }
 
   public componentDidMount() {
-    this.alive = true;
-    this.watchCursor();
+    this.ctx.alive = true;
+    watchCursor(this, this.ctx);
   }
 
   public componentWillUnmount() {
-    this.alive = false;
+    this.ctx.alive = false;
   }
 
   public render() {
@@ -53,22 +51,11 @@ class TextArea extends React.Component<TextAreaProps> {
   }
 
   private onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.props.setCode(e.target.value);
+    setCode(this, e.target);
   }
 
   private refArea(elem: HTMLTextAreaElement | null) {
-    this.area = elem;
-  }
-
-  private watchCursor() {
-    if (this.area && this.alive) {
-      this.props.setCursor(this.area);
-      const isFocused = document.activeElement === this.area;
-      if (isFocused !== this.props.isFocused) {
-        this.props.setFocus(isFocused);
-      }
-      requestAnimationFrame(this.watchCursor);
-    }
+    this.ctx.area = elem;
   }
 }
 

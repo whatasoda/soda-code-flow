@@ -3,7 +3,7 @@ import { CodeFlowPayload, FlowState } from '../../code-flow';
 import initRegistry, { ActionsMapOf, ActionsOf } from '../helper';
 
 interface State {
-  status: 'running' | 'fetching' | 'ready' | 'error' | 'init' | 'evaluating';
+  status: 'running' | 'fetching' | 'ready' | 'error' | 'changed';
   interval: number;
   step: number;
   lifespan: number;
@@ -15,7 +15,7 @@ interface State {
 }
 
 const base = initRegistry<State>(() => ({
-  status: 'init',
+  status: 'changed',
   interval: 300,
   step: -1,
   lifespan: 0,

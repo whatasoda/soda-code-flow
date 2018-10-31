@@ -15,9 +15,9 @@ const CTextArea = ReactRedux.connect<StateProps, DispatchProps, {}, State>(
   },
   (dispatch) => {
     const { flow, textarea } = actionCreators;
-    const { setCode } = flow;
+    const { setCode, setStatus } = flow;
     const { setCursor, setFocus } = textarea;
-    return wrapAll(dispatch, { setCode, setFocus, setCursor });
+    return wrapAll(dispatch, { setCode, setStatus, setFocus, setCursor });
   },
 )(TextArea);
 
