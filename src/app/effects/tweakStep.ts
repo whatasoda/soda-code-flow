@@ -1,5 +1,5 @@
 import { ActionCreatorsMap } from '../store';
-import { TaskContext } from './types';
+import { EffectContext } from './types';
 
 export interface TweakStepProps {
   step: number;
@@ -7,7 +7,7 @@ export interface TweakStepProps {
   setStep: ActionCreatorsMap['flow']['setStep'];
 }
 
-const tweakStep = ({ props }: TaskContext<TweakStepProps>, change: number): number => {
+const tweakStep = ({ props }: EffectContext<TweakStepProps>, change: number): number => {
   const { step, lifespan, setStep } = props;
   change = Math.sign(change) * Math.min(Math.abs(change), lifespan);
 

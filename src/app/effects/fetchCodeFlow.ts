@@ -1,6 +1,6 @@
 import codeFlow, { CustomContext } from '../code-flow';
 import { ActionCreatorsMap } from '../store';
-import { TaskContext } from './types';
+import { EffectContext } from './types';
 
 export interface FetchCodeFlowProps {
   code: string;
@@ -9,7 +9,7 @@ export interface FetchCodeFlowProps {
   setStatus: ActionCreatorsMap['flow']['setStatus'];
 }
 
-const fetchCodeFlow = async ({ props }: TaskContext<FetchCodeFlowProps>) => {
+const fetchCodeFlow = async ({ props }: EffectContext<FetchCodeFlowProps>) => {
   const { code, watch, assignCodeFlow, setStatus } = props;
   setStatus('fetching');
   const codeFlowPayload = await codeFlow<CustomContext>({

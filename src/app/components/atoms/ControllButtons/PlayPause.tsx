@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ControllProgressBarProps, getBarStatus, toggleRunning, ToggleRunningProps } from '../../../tasks/controll';
+import { ControllProgressBarProps, getBarStatus, toggleRunning, ToggleRunningProps } from '../../../effects/controll';
 import styleHelper from '../../../util/styleHelper';
 import Icon from '../Icon';
 import general = require('./general.css');

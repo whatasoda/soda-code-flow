@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setCode, SetCodeProps, watchCursor, WatchCursorContext, WatchCursorProps } from '../../../tasks/textarea';
+import { setCode, SetCodeProps, watchCursor, WatchCursorContext, WatchCursorProps } from '../../../effects/textarea';
 import styleHelper from '../../../util/styleHelper';
 import CodeDeco from '../../atoms/CodeDeco';
 import style = require('./TextArea.css');

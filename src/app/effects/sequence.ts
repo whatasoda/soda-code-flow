@@ -1,6 +1,6 @@
 import { ActionCreatorsMap, State } from '../store';
 import tweakStep from './tweakStep';
-import { TaskContext } from './types';
+import { EffectContext } from './types';
 
 export interface SequenceProps {
   status: State['flow']['status'];
@@ -16,7 +16,7 @@ export interface SequenceState {
   alive: boolean;
 }
 
-const startSequence = (component: TaskContext<SequenceProps, SequenceState>) => {
+const startSequence = (component: EffectContext<SequenceProps, SequenceState>) => {
   const sequence = () => {
     // to support change of objects themselves,
     // require to do destructuring assignment here

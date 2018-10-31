@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FetchCodeFlowProps } from '../../../tasks/fetchCodeFlow';
-import startSequence, { SequenceProps, SequenceState } from '../../../tasks/sequence';
+import { FetchCodeFlowProps } from '../../../effects/fetchCodeFlow';
+import startSequence, { SequenceProps, SequenceState } from '../../../effects/sequence';
 import styleHelper from '../../../util/styleHelper';
 import { Fetch, PlayPause, Tweak } from '../../atoms/ControllButtons';
 import style = require('./Sequencer.css');

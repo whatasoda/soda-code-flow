@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ControllProgressBarProps, getBarStatus } from '../../../tasks/controll';
-import tweakStep, { TweakStepProps } from '../../../tasks/tweakStep';
+import { ControllProgressBarProps, getBarStatus } from '../../../effects/controll';
+import tweakStep, { TweakStepProps } from '../../../effects/tweakStep';
 import styleHelper from '../../../util/styleHelper';
 import Icon from '../Icon';
 import general = require('./general.css');
