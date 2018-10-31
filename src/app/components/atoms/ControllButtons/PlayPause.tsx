@@ -19,7 +19,7 @@ class PlayPause extends React.Component<PlayPauseProps> {
 
     return (
       <a href="#" className={s(['button', !isAvailable && 'inavailable'])} onClick={this.toggle}>
-        <Icon name={isRunning ? 'pause2' : 'play3'} size="xxlarge" />
+        <Icon name={isRunning ? 'pause-outline' : 'play-outline'} size="xxlarge" />
       </a>
     );
   }

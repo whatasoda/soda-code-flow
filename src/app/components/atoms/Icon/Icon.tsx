@@ -6,20 +6,16 @@ const s = styleHelper(style);
 
 interface IconProps {
   name:
-    | 'bubble'
     | 'spinner3'
-    | 'spinner11'
-    | 'plus'
-    | 'minus'
-    | 'play3'
-    | 'pause2'
-    | 'stop2'
-    | 'backward2'
-    | 'forward3'
-    | 'first'
-    | 'last'
-    | 'previous2'
-    | 'next2'
+    | 'reload'
+    | 'add-outline'
+    | 'minus-outline'
+    | 'play-outline'
+    | 'pause-outline'
+    | 'cheveron-outline-left'
+    | 'cheveron-outline-right'
+    | 'chat-bubble-dots'
+    | 'repost'
     | 'github';
   size?: 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge';
 }

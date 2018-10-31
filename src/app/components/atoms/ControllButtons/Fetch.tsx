@@ -1,6 +1,10 @@
 import * as React from 'react';
 import fetchCodeFlow, { FetchCodeFlowProps } from '../../../tasks/fetchCodeFlow';
+import styleHelper from '../../../util/styleHelper';
 import Icon from '../Icon';
+import general = require('./general.css');
+
+const s = styleHelper(general);
 
 interface FetchProps extends FetchCodeFlowProps {}
 
@@ -18,8 +22,8 @@ class Fetch extends React.Component<FetchProps> {
 
   public render() {
     return (
-      <a href="#" onClick={this.fetch}>
-        <Icon name="spinner11" size="xxlarge" />
+      <a href="#" className={s(['button'])} onClick={this.fetch}>
+        <Icon name="reload" size="xxlarge" />
       </a>
     );
   }

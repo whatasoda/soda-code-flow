@@ -24,47 +24,35 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-bubble:before {
-  content: "\e96b";
+.icon-add-outline:before {
+  content: "\e900";
+}
+.icon-chat-bubble-dots:before {
+  content: "\e901";
+}
+.icon-cheveron-outline-left:before {
+  content: "\e902";
+}
+.icon-cheveron-outline-right:before {
+  content: "\e903";
+}
+.icon-minus-outline:before {
+  content: "\e904";
+}
+.icon-pause-outline:before {
+  content: "\e905";
+}
+.icon-play-outline:before {
+  content: "\e906";
+}
+.icon-reload:before {
+  content: "\e907";
+}
+.icon-repost:before {
+  content: "\e908";
 }
 .icon-spinner3:before {
   content: "\e97c";
-}
-.icon-spinner11:before {
-  content: "\e984";
-}
-.icon-plus:before {
-  content: "\ea0a";
-}
-.icon-minus:before {
-  content: "\ea0b";
-}
-.icon-play3:before {
-  content: "\ea1c";
-}
-.icon-pause2:before {
-  content: "\ea1d";
-}
-.icon-stop2:before {
-  content: "\ea1e";
-}
-.icon-backward2:before {
-  content: "\ea1f";
-}
-.icon-forward3:before {
-  content: "\ea20";
-}
-.icon-first:before {
-  content: "\ea21";
-}
-.icon-last:before {
-  content: "\ea22";
-}
-.icon-previous2:before {
-  content: "\ea23";
-}
-.icon-next2:before {
-  content: "\ea24";
 }
 .icon-github:before {
   content: "\eab0";
