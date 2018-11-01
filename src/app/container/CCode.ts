@@ -6,9 +6,6 @@ import { DispatchPropsOf, StatePropsOf } from './types';
 type StateProps = StatePropsOf<CodeProps>;
 type DispatchProps = DispatchPropsOf<CodeProps>;
 
-const CCode = ReactRedux.connect<StateProps, DispatchProps, {}, State>(({ flow }) => {
-  const { code } = flow;
-  return { code };
-})(Code);
+const CCode = ReactRedux.connect<StateProps, DispatchProps, {}, State>(({ flow: { code } }) => ({ code }))(Code);
 
 export default CCode;
