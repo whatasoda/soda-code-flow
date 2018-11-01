@@ -2,6 +2,7 @@ import { actionCreators, ActionCreatorsMap, State } from '../../store';
 import wrapAll from '../../util/wrapAll';
 import connect from '../connect';
 import { getBarStatus } from '../util/sequenceBar';
+import sequence from './sequence';
 
 interface ToggleRunningContext {
   status: State['flow']['status'];
@@ -19,9 +20,11 @@ const toggleRunning = connect<State, ToggleRunningContext>(
   if (!isAvailable) {
     return;
   }
-  setStatus(isRunning ? 'ready' : 'running');
+  const nextStatus = isRunning ? 'ready' : 'running';
+  setStatus(nextStatus);
+  if (nextStatus === 'running') {
+    sequence();
+  }
 });
-
-export const toggleRunningEffect = toggleRunning.effect;
 
 export default toggleRunning;

@@ -1,128 +1,78 @@
-import * as React from 'react';
-import * as ReactRedux from 'react-redux';
-import { Action, Dispatch } from 'redux';
+import { Action, Dispatch, Store } from 'redux';
 import { DispatchPropsOf, StatePropsOf } from '../container/types';
 
-interface EffectProps<TContext, TArgs extends any[]> {
-  controller: {
-    observer: (handle: (...args: TArgs) => void) => Promise<void>;
-    effect: (ctx: TContext, ...args: TArgs) => void;
-    kill: () => void;
-  };
-  ctx: TContext;
+interface EnhancedEffect<TState, TContext, TArgs extends any[], TPayload> {
+  (...args: TArgs): TPayload;
+  effect: (ctx: TContext, ...args: TArgs) => TPayload;
+  enhancer: EffectEnhancer<TState, TContext>;
 }
 
-const EffectComponents: React.SFC[] = [];
-export const EffectRoot: React.SFC = () =>
-  React.createElement(
-    React.Fragment,
-    {},
-    ...EffectComponents.map((Component, key) => React.createElement(Component, { key })),
-  );
+class EffectEnhancer<TState, TContext> {
+  private ctx!: TContext;
+  private changed: boolean = true;
+  private disptchCtx: DispatchPropsOf<TContext> | null = null;
+  private store: Store<TState, any> | null = null;
 
-const emptyHandler = () => void 0;
+  constructor(
+    private mapStateToProps: (state: TState) => StatePropsOf<TContext>,
+    private mapDispatchProps: (dispatch: Dispatch<Action<any>>) => DispatchPropsOf<TContext>,
+  ) {}
+
+  public enhance<TArgs extends any[], TPayload>(
+    effect: (ctx: TContext, ...args: TArgs) => TPayload,
+  ): EnhancedEffect<TState, TContext, TArgs, TPayload> {
+    const enhanced = (...args: TArgs) => effect(this.consume(), ...args);
+    enhanced.effect = effect;
+    enhanced.enhancer = this;
+    return enhanced;
+  }
+
+  public consume(): TContext | never {
+    this.updateContext();
+    if (this.ctx === null) {
+      throw new Error('Invalid context');
+    }
+    return this.ctx;
+  }
+
+  public provide(store: Store<TState, any>) {
+    this.store = store;
+    this.disptchCtx = this.mapDispatchProps(store.dispatch);
+  }
+
+  public touch() {
+    this.changed = true;
+  }
+
+  private updateContext() {
+    if (!this.store || !this.disptchCtx) {
+      throw new Error('No store is assigned');
+    }
+    if (this.changed) {
+      this.changed = false;
+      this.ctx = this.mergeContext(this.mapStateToProps(this.store.getState()), this.disptchCtx);
+    }
+  }
+
+  private mergeContext(stateContext: StatePropsOf<TContext>, dispatchContext: DispatchPropsOf<TContext>): TContext {
+    return Object.assign({}, stateContext, dispatchContext) as TContext;
+  }
+}
 
 const connect = <TState, TContext>(
   mapStateToProps: (state: TState) => StatePropsOf<TContext>,
   mapDispatchProps: (dispatch: Dispatch<Action<any>>) => DispatchPropsOf<TContext>,
-  handleContextChange: (ctx: TContext) => void = emptyHandler,
 ) => {
-  interface TStateProps {
-    ctx: StatePropsOf<TContext>;
-  }
-  interface TDispatchProps {
-    ctx: DispatchPropsOf<TContext>;
-  }
-  interface TMergedProps {
-    ctx: TContext;
-  }
-  type TOwnProps = Pick<EffectProps<TContext, any[]>, 'controller'>;
-
-  const Connected = ReactRedux.connect<TStateProps, TDispatchProps, TOwnProps, TMergedProps, TState>(
-    (state) => ({ ctx: mapStateToProps(state) }),
-    (dispatch) => ({ ctx: mapDispatchProps(dispatch) }),
-    ({ ctx: sCtx }, { ctx: dCtx }, ownProps) => {
-      const ctx = Object.assign({} as TContext, sCtx, dCtx);
-      handleContextChange(ctx);
-      return { ...ownProps, ctx };
-    },
-  )(EffectComponent);
-
-  const enhancer = <TArgs extends any[], TPayload>(effect: (ctx: TContext, ...args: TArgs) => TPayload) => {
-    const { dispatch, kill, observer } = dispatcher<TArgs>();
-    const controller: TOwnProps['controller'] = { effect: effect as any, kill, observer };
-    const Component = () => React.createElement(Connected, { controller });
-    EffectComponents.push(Component);
-    interface TEnhanced {
-      (...args: TArgs): void;
-      effect: (ctx: TContext, ...args: TArgs) => TPayload;
-    }
-    const enhanced = dispatch as TEnhanced;
-    enhanced.effect = effect;
-    return enhanced;
-  };
-
-  return enhancer;
+  const enhancer = new EffectEnhancer(mapStateToProps, mapDispatchProps);
+  return enhancer.enhance.bind(enhancer) as typeof enhancer.enhance;
 };
 
-class EffectComponent extends React.PureComponent<EffectProps<any, any[]>> {
-  public componentDidMount() {
-    this.props.controller.observer(this.handle.bind(this));
-  }
-
-  public componentWillUnmount() {
-    this.props.controller.kill();
-  }
-
-  public render() {
-    return null;
-  }
-
-  private handle(...args: any[]) {
-    this.props.controller.effect(this.props.ctx, ...args);
-  }
-}
-
-const dispatcher = <TArgs extends any[]>() => {
-  interface TNextObject {
-    next: Promise<TNextObject> | null;
-    args: TArgs;
-  }
-
-  let nextResolver: (obj: TNextObject) => void = null as any;
-  let observed = false;
-  const initial = new Promise<TNextObject>((resolve) => (nextResolver = resolve));
-
-  const dispatch = (...args: TArgs) => {
-    if (!observed) {
-      // tslint:disable-next-line:no-console
-      console.warn('No effect component is rendered.');
-      return;
-    }
-    const currResolver = nextResolver;
-    const next = new Promise<TNextObject>((resolve) => (nextResolver = resolve));
-    currResolver({ next, args });
-  };
-
-  const kill = () => nextResolver({ next: null, args: [] as any });
-
-  const observer = async (handle: (...args: TArgs) => void) => {
-    if (observed) {
-      return;
-    }
-    observed = true;
-    let curr = initial;
-    while (true) {
-      const { next, args } = await curr;
-      handle(...args);
-      if (!next) {
-        break;
-      }
-      curr = next;
-    }
-  };
-
-  return { dispatch, kill, observer };
+export const provideAll = <TState, TAction extends Action>(
+  store: Store<TState, TAction>,
+  effectEnhancers: Array<EffectEnhancer<TState, any>>,
+) => {
+  effectEnhancers.forEach((enhancer) => enhancer.provide(store));
+  store.subscribe(() => effectEnhancers.forEach((enhancer) => enhancer.touch()));
 };
 
 export default connect;

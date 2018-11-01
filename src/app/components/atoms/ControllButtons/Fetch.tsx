@@ -1,5 +1,5 @@
 import * as React from 'react';
-import fetchCodeFlow from '../../../effects/codeFlow/fetch';
+import fetchCodeFlow from '../../../effects/codeFlow/fetchCodeFlow';
 import styleHelper from '../../../util/styleHelper';
 import Icon from '../Icon';
 import general = require('./general.css');

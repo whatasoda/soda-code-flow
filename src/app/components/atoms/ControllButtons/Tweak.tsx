@@ -1,5 +1,5 @@
 import * as React from 'react';
-import tweakStep from '../../../effects/sequence/tweak';
+import tweakStep from '../../../effects/sequence/tweakStep';
 import { getBarStatus } from '../../../effects/util/sequenceBar';
 import { State } from '../../../store';
 import styleHelper from '../../../util/styleHelper';

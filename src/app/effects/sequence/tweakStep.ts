@@ -31,6 +31,4 @@ const tweakStep = connect<State, TweakStepContext>(
   },
 );
 
-export const tweakEffect = tweakStep.effect;
-
 export default tweakStep;

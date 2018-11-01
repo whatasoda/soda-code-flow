@@ -7,14 +7,6 @@ interface WatchCursorContext {
   setCursor: ActionCreatorsMap['textarea']['setCursor'];
   setFocus: ActionCreatorsMap['textarea']['setFocus'];
 }
-interface WatchCursorState {
-  ctx: WatchCursorContext;
-  textarea: HTMLTextAreaElement | null;
-}
-const state: WatchCursorState = {
-  ctx: {} as any,
-  textarea: null,
-};
 
 const watchCursor = connect<State, WatchCursorContext>(
   ({ textarea: { isFocused } }) => ({ isFocused }),
@@ -22,26 +14,16 @@ const watchCursor = connect<State, WatchCursorContext>(
     const { setCursor, setFocus } = actionCreators.textarea;
     return wrapAll(dispatch, { setCursor, setFocus });
   },
-  (ctx) => (state.ctx = ctx),
-)((_, textarea: HTMLTextAreaElement | null) => {
-  if (textarea !== state.textarea) {
-    const prev = state.textarea;
-    state.textarea = textarea;
-    if (textarea && !prev) {
-      watch();
+)((ctx, textarea: HTMLTextAreaElement | null, next?: () => void) => {
+  if (textarea && textarea.getRootNode() === textarea) {
+    ctx.setCursor(textarea);
+    const isFocused = document.activeElement === textarea;
+    if (isFocused !== ctx.isFocused) {
+      ctx.setFocus(isFocused);
     }
+    const nextPhase: () => void = next || (() => watchCursor(textarea, nextPhase));
+    requestAnimationFrame(nextPhase);
   }
 });
-
-const watch = () => {
-  if (state.textarea) {
-    state.ctx.setCursor(state.textarea);
-    const isFocused = document.activeElement === state.textarea;
-    if (isFocused !== state.ctx.isFocused) {
-      state.ctx.setFocus(isFocused);
-    }
-    requestAnimationFrame(watch);
-  }
-};
 
 export default watchCursor;

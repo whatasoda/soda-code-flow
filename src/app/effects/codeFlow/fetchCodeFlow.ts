@@ -26,6 +26,4 @@ const fetchCodeFlow = connect<State, FetchCodeFlowContext>(
   setStatus('ready');
 });
 
-export const fetchCodeFlowEffect = fetchCodeFlow.effect;
-
 export default fetchCodeFlow;
