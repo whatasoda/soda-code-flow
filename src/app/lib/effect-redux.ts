@@ -23,8 +23,8 @@ class EffectRedux<TState, TContext> {
     };
   }
 
-  private ctx!: TContext;
   private changed: boolean = true;
+  private ctx: TContext | null = null;
   private disptchCtx: DispatchPropsOf<TContext> | null = null;
   private store: Store<TState, any> | null = null;
 
