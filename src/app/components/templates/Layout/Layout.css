@@ -4,8 +4,8 @@
   display: grid;
   grid-template-areas:
     'header header'
-    'code .'
-    'code .'
+    'code display'
+    'code display'
     'sequencer sequencer';
   grid-auto-rows: 50px 1fr 1fr 50px;
   grid-auto-columns: 1fr 1fr;
@@ -16,7 +16,7 @@
     grid-template-areas:
       'header header'
       'code code'
-      '. .'
+      'display display'
       'sequencer sequencer';
   }
 }
@@ -31,5 +31,9 @@
 }
 
 .layout>*:nth-child(3) {
+  grid-area: display;
+}
+
+.layout>*:nth-child(4) {
   grid-area: sequencer;
 }

@@ -13,10 +13,6 @@ export interface FlowHighlightProps {
 
 const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, item }) => {
   const [start = 0, end = 0] = item ? item.location : [];
-  const value = item ? item.data.value : null;
-
-  // tslint:disable-next-line:no-console
-  console.log(value);
   return <CodeDeco {...{ code, start, end }} className={s(['curr'])} />;
 };
 
