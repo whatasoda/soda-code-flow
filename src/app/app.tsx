@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReactRedux from 'react-redux';
+import * as ReactRedux from 'react-redux';
 import Layout from './components/templates/Layout/Layout';
 import { enhancers } from './effects';
 import EffectRedux from './lib/effect-redux';
