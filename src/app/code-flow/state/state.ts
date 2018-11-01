@@ -50,18 +50,24 @@ class FlowState {
 
   public updateIdentifier(profile: FlowProfile, value: any) {
     const code = this.getCode(profile.loc);
-    if (!isIdentifierCode(code)) {
-      return;
-    }
+    const scope = this.findScope(code, this.scopes[profile.scope]);
 
-    let scope = this.scopes[profile.scope];
-    while (scope) {
-      if (scope.bindings.includes(code)) {
-        this.identifiers[scope.id][code] = value;
-        break;
-      }
-      scope = this.scopes[scope.parent];
+    if (scope) {
+      this.identifiers[scope.id][code] = value;
     }
+  }
+
+  private findScope(code: string, initial: ScopeProfile): ScopeProfile | null {
+    if (isIdentifierCode(code)) {
+      let scope = initial;
+      while (scope) {
+        if (scope.bindings.includes(code)) {
+          return scope;
+        }
+        scope = this.scopes[scope.parent];
+      }
+    }
+    return null;
   }
 
   private identifierSnapshot() {
