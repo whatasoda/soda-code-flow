@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import Layout from './components/templates/Layout/Layout';
-// import SequencerContainer from './container/SequencerContainer';
+import { EffectRoot } from './effects/connect';
 import configureStore, { actionCreators } from './store';
 
 const store = configureStore();
@@ -16,8 +16,10 @@ for (let i=0; i<10; i++) {
 
 const App = () => (
   <Provider store={store}>
-    <Layout />
-    {/* <SequencerContainer /> */}
+    <React.Fragment>
+      <EffectRoot />
+      <Layout />
+    </React.Fragment>
   </Provider>
 );
 

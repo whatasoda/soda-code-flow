@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { setCode, SetCodeProps, watchCursor, WatchCursorContext, WatchCursorProps } from '../../../effects/textarea';
+import setCode from '../../../effects/textarea/setCode';
+import watchCursor from '../../../effects/textarea/watchCursor';
 import styleHelper from '../../../util/styleHelper';
 import CodeDeco from '../../atoms/CodeDeco';
 import style = require('./TextArea.css');
 
 const s = styleHelper(style);
 
-export interface TextAreaProps extends SetCodeProps, WatchCursorProps {
+export interface TextAreaProps {
   code: string;
   cursor: number;
   start: number;
@@ -15,24 +16,8 @@ export interface TextAreaProps extends SetCodeProps, WatchCursorProps {
 }
 
 class TextArea extends React.Component<TextAreaProps> {
-  private ctx: WatchCursorContext = {
-    area: null,
-    alive: false,
-  };
-
-  constructor(props: TextAreaProps) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.refArea = this.refArea.bind(this);
-  }
-
-  public componentDidMount() {
-    this.ctx.alive = true;
-    watchCursor(this, this.ctx);
-  }
-
   public componentWillUnmount() {
-    this.ctx.alive = false;
+    watchCursor(null);
   }
 
   public render() {
@@ -45,17 +30,17 @@ class TextArea extends React.Component<TextAreaProps> {
             <CodeDeco {...{ code }} start={cursor} end={cursor + 1} className={s(['cursor'])} />
           </React.Fragment>
         )}
-        <textarea ref={this.refArea} className={s(['text'])} value={code} onChange={this.onChange} />
+        <textarea ref={this.refArea} className={s(['text'])} defaultValue={code} onChange={this.onChange} />
       </React.Fragment>
     );
   }
 
   private onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setCode(this, e.target);
+    setCode(e.target);
   }
 
   private refArea(elem: HTMLTextAreaElement | null) {
-    this.ctx.area = elem;
+    watchCursor(elem);
   }
 }
 

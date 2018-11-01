@@ -1,40 +1,35 @@
 import * as React from 'react';
-import { FetchCodeFlowProps } from '../../../effects/fetchCodeFlow';
-import startSequence, { SequenceProps, SequenceState } from '../../../effects/sequence';
+import handleSequence from '../../../effects/sequence/start';
+import { State } from '../../../store';
 import styleHelper from '../../../util/styleHelper';
 import { Fetch, PlayPause, Tweak } from '../../atoms/ControllButtons';
 import style = require('./Sequencer.css');
 
 const s = styleHelper(style);
 
-export interface SequencerProps extends SequenceProps, FetchCodeFlowProps {}
+export interface SequencerProps {
+  status: State['flow']['status'];
+}
 
-interface SequencerState extends SequenceState {}
-
-class Sequencer extends React.Component<SequencerProps, SequencerState> {
-  constructor(props: SequencerProps) {
-    super(props);
-    this.state = {
-      alive: true,
-    };
-  }
-
+class Sequencer extends React.Component<SequencerProps> {
   public componentDidMount() {
-    startSequence(this);
+    handleSequence(true);
   }
 
   public componentWillUnmount() {
-    this.setState({ alive: false });
+    handleSequence(false);
   }
 
   public render() {
+    const { status } = this.props;
+    const common = { status };
     return (
       <div className={s(['container'])}>
         <div className={s(['buttons'])}>
-          <Fetch {...this.props} />
-          <Tweak {...this.props} direction={-1} />
-          <PlayPause {...this.props} />
-          <Tweak {...this.props} direction={1} />
+          <Fetch />
+          <Tweak {...common} direction={-1} />
+          <PlayPause {...common} />
+          <Tweak {...common} direction={1} />
         </div>
         <div>aa</div>
       </div>
