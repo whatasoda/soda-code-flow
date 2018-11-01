@@ -1,6 +1,6 @@
+import { connect } from '../../lib/effect-redux';
 import { actionCreators, ActionCreatorsMap, State } from '../../store';
 import wrapAll from '../../util/wrapAll';
-import connect from '../connect';
 import { getBarStatus } from '../util/sequenceBar';
 import sequence from './sequence';
 

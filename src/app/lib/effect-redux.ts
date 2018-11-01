@@ -59,7 +59,7 @@ class EffectEnhancer<TState, TContext> {
   }
 }
 
-const connect = <TState, TContext>(
+export const connect = <TState, TContext>(
   mapStateToProps: (state: TState) => StatePropsOf<TContext>,
   mapDispatchProps: (dispatch: Dispatch<Action<any>>) => DispatchPropsOf<TContext>,
 ) => {
@@ -74,5 +74,3 @@ export const provideAll = <TState, TAction extends Action>(
   effectEnhancers.forEach((enhancer) => enhancer.provide(store));
   store.subscribe(() => effectEnhancers.forEach((enhancer) => enhancer.touch()));
 };
-
-export default connect;

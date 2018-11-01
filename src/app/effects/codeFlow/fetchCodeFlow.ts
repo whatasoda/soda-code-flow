@@ -1,7 +1,7 @@
 import codeFlow, { CustomContext } from '../../code-flow';
+import { connect } from '../../lib/effect-redux';
 import { actionCreators, ActionCreatorsMap, State } from '../../store';
 import wrapAll from '../../util/wrapAll';
-import connect from '../connect';
 
 interface FetchCodeFlowContext {
   code: string;

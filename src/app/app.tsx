@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import Layout from './components/templates/Layout/Layout';
 import { enhancers } from './effects';
-import { provideAll } from './effects/connect';
+import { provideAll } from './lib/effect-redux';
 import configureStore, { actionCreators } from './store';
 
 const store = configureStore();
