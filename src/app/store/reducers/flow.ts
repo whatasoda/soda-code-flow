@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { CodeFlowPayload, FlowState } from '../../code-flow';
-import initRegistry, { ActionsMapOf, ActionsOf } from '../helper';
+import unitRegistry, { ActionsMapOf, ActionsOf } from '../../lib/unit-redux';
 
 interface State {
   status: 'running' | 'fetching' | 'ready' | 'error' | 'changed';
@@ -14,7 +14,7 @@ interface State {
   watch: string[];
 }
 
-const base = initRegistry<State>(() => ({
+const base = unitRegistry<State>(() => ({
   status: 'changed',
   interval: 300,
   step: -1,

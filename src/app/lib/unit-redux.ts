@@ -12,11 +12,17 @@ declare module 'redux' {
 type Creator<TAction extends Action> = (...args: any[]) => TAction;
 type NullableReducer<TState, TAction extends Action> = (state: TState, action: TAction) => TState | null;
 
-export type ActionsOf<TRegistry extends AnyRegistry> = TRegistry extends Registry<any, infer TActions, any, any, any>
+export type ActionsOf<TRegistry extends AnyRegistry> = TRegistry extends UnitRegistry<
+  any,
+  infer TActions,
+  any,
+  any,
+  any
+>
   ? TActions
   : never;
 
-export type ActionCreatorsOf<TRegistry extends AnyRegistry> = TRegistry extends Registry<
+export type ActionCreatorsOf<TRegistry extends AnyRegistry> = TRegistry extends UnitRegistry<
   any,
   any,
   infer TActionCreators,
@@ -26,7 +32,7 @@ export type ActionCreatorsOf<TRegistry extends AnyRegistry> = TRegistry extends 
   ? TActionCreators
   : never;
 
-export type RegisteredActionTypesOf<TRegistry extends AnyRegistry> = TRegistry extends Registry<
+export type RegisteredActionTypesOf<TRegistry extends AnyRegistry> = TRegistry extends UnitRegistry<
   any,
   any,
   any,
@@ -57,7 +63,7 @@ type ReducerOf<TState, TActions extends Action, TType extends TActions['type']> 
 
 type CombineFunc<TState, TRegistry extends AnyRegistry<TState>> = () => TRegistry;
 
-type Combine<TState, TBase extends AnyRegistry<TState>, TRegistry extends AnyRegistry<TState>> = Registry<
+type Combine<TState, TBase extends AnyRegistry<TState>, TRegistry extends AnyRegistry<TState>> = UnitRegistry<
   TState,
   ActionsOf<TBase> | ActionsOf<TRegistry>,
   ActionCreatorsOf<TBase> & ActionCreatorsOf<TRegistry>,
@@ -71,7 +77,7 @@ type AnyRegistry<
   ACM extends ActionCreatorsMap = any,
   RAT extends A['type'] = any,
   TAT extends A['type'] = any
-> = Registry<S, A, ACM, RAT, TAT>;
+> = UnitRegistry<S, A, ACM, RAT, TAT>;
 
 /**
  * @param S State
@@ -80,14 +86,20 @@ type AnyRegistry<
  * @param RAT Registered Action Type
  * @param TAT Target Action Type
  */
-interface Registry<S, A extends Action, ACM extends ActionCreatorsMap, RAT extends A['type'], TAT extends A['type']> {
-  action<TAction extends Action>(type: TAction['type']): Registry<S, A | TAction, ACM, RAT, TAction['type']>;
+interface UnitRegistry<
+  S,
+  A extends Action,
+  ACM extends ActionCreatorsMap,
+  RAT extends A['type'],
+  TAT extends A['type']
+> {
+  action<TAction extends Action>(type: TAction['type']): UnitRegistry<S, A | TAction, ACM, RAT, TAction['type']>;
 
   actionCreator<TCreators extends ActionCreatorsMap<ActionOf<A, TAT>>>(
     creators: (type: TAT) => TCreators,
-  ): Registry<S, A, ACM & TCreators, RAT, TAT>;
+  ): UnitRegistry<S, A, ACM & TCreators, RAT, TAT>;
 
-  reducer(reducer: ReducerOf<S, A, TAT>): Registry<S, A, ACM, RAT | TAT, TAT>;
+  reducer(reducer: ReducerOf<S, A, TAT>): UnitRegistry<S, A, ACM, RAT | TAT, TAT>;
 
   getActionTypes(): { [TType in RAT]: TType };
 
@@ -102,17 +114,17 @@ interface Registry<S, A extends Action, ACM extends ActionCreatorsMap, RAT exten
   combine<TCombineFunc extends CombineFunc<S, any>>(
     func: TCombineFunc,
   ): TCombineFunc extends CombineFunc<any, infer TRegistry>
-    ? Combine<S, Registry<S, A, ACM, RAT, TAT>, TRegistry>
+    ? Combine<S, UnitRegistry<S, A, ACM, RAT, TAT>, TRegistry>
     : never;
 }
 
-const initRegistry = <S>(initialState: () => S) => {
+const unitRegistry = <S>(initialState: () => S) => {
   const actionTypes: { [type: string]: string } = {};
   const actionCreators: ActionCreatorsMap = {};
   const reducers: ReducersMap<S, Action> = {} as any;
   let currType: string | null = null;
 
-  const registry: Registry<S, Action, any, string, string> = {
+  const registry: UnitRegistry<S, Action, any, string, string> = {
     action: (type) => {
       currType = actionTypes[type] = type;
       return registry;
@@ -153,7 +165,7 @@ const initRegistry = <S>(initialState: () => S) => {
 
     combine: (func) => func(),
   };
-  return (registry as any) as Registry<S, never, {}, never, never>;
+  return (registry as any) as UnitRegistry<S, never, {}, never, never>;
 };
 
-export default initRegistry;
+export default unitRegistry;

@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import initRegistry, { ActionsMapOf, ActionsOf } from '../helper';
+import unitRegistry, { ActionsMapOf, ActionsOf } from '../../lib/unit-redux';
 
 interface State {
   cursor: number;
@@ -8,7 +8,7 @@ interface State {
   isFocused: boolean;
 }
 
-const base = initRegistry<State>(() => ({
+const base = unitRegistry<State>(() => ({
   cursor: 0,
   start: 0,
   end: 0,
