@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
+import ReactRedux from 'react-redux';
 import Layout from './components/templates/Layout/Layout';
 import { enhancers } from './effects';
-import { provideAll } from './lib/effect-redux';
+import EffectRedux from './lib/effect-redux';
 import configureStore, { actionCreators } from './store';
 
 const store = configureStore();
@@ -17,12 +17,12 @@ for (let i=0; i<10; i++) {
 store.dispatch(actionCreators.flow.insertWatchTarget(0));
 store.dispatch(actionCreators.flow.setWatchTargetName(0, 'lower'));
 
-provideAll(store, enhancers);
+EffectRedux.Provider(store)(enhancers);
 
 const App = () => (
-  <Provider store={store}>
+  <ReactRedux.Provider store={store}>
     <Layout />
-  </Provider>
+  </ReactRedux.Provider>
 );
 
 export default App;

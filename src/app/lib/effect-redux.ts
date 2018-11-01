@@ -4,10 +4,25 @@ import { DispatchPropsOf, StatePropsOf } from '../container/types';
 interface EnhancedEffect<TState, TContext, TArgs extends any[], TPayload> {
   (...args: TArgs): TPayload;
   effect: (ctx: TContext, ...args: TArgs) => TPayload;
-  enhancer: EffectEnhancer<TState, TContext>;
+  enhancer: EffectRedux<TState, TContext>;
 }
 
-class EffectEnhancer<TState, TContext> {
+class EffectRedux<TState, TContext> {
+  public static connect<TState, TContext>(
+    mapStateToProps: (state: TState) => StatePropsOf<TContext>,
+    mapDispatchProps: (dispatch: Dispatch<Action<any>>) => DispatchPropsOf<TContext>,
+  ) {
+    const enhancer = new EffectRedux(mapStateToProps, mapDispatchProps);
+    return enhancer.enhance.bind(enhancer) as typeof enhancer.enhance;
+  }
+
+  public static Provider<TState, TAction extends Action>(store: Store<TState, TAction>) {
+    return (effectEnhancers: Array<EffectRedux<TState, any>>) => {
+      effectEnhancers.forEach((enhancer) => enhancer.provide(store));
+      store.subscribe(() => effectEnhancers.forEach((enhancer) => enhancer.touch()));
+    };
+  }
+
   private ctx!: TContext;
   private changed: boolean = true;
   private disptchCtx: DispatchPropsOf<TContext> | null = null;
@@ -27,7 +42,11 @@ class EffectEnhancer<TState, TContext> {
     return enhanced;
   }
 
-  public consume(): TContext | never {
+  private touch() {
+    this.changed = true;
+  }
+
+  private consume(): TContext | never {
     this.updateContext();
     if (this.ctx === null) {
       throw new Error('Invalid context');
@@ -35,13 +54,9 @@ class EffectEnhancer<TState, TContext> {
     return this.ctx;
   }
 
-  public provide(store: Store<TState, any>) {
+  private provide(store: Store<TState, any>) {
     this.store = store;
     this.disptchCtx = this.mapDispatchProps(store.dispatch);
-  }
-
-  public touch() {
-    this.changed = true;
   }
 
   private updateContext() {
@@ -59,18 +74,6 @@ class EffectEnhancer<TState, TContext> {
   }
 }
 
-export const connect = <TState, TContext>(
-  mapStateToProps: (state: TState) => StatePropsOf<TContext>,
-  mapDispatchProps: (dispatch: Dispatch<Action<any>>) => DispatchPropsOf<TContext>,
-) => {
-  const enhancer = new EffectEnhancer(mapStateToProps, mapDispatchProps);
-  return enhancer.enhance.bind(enhancer) as typeof enhancer.enhance;
-};
+export const { connect, Provider } = EffectRedux;
 
-export const provideAll = <TState, TAction extends Action>(
-  store: Store<TState, TAction>,
-  effectEnhancers: Array<EffectEnhancer<TState, any>>,
-) => {
-  effectEnhancers.forEach((enhancer) => enhancer.provide(store));
-  store.subscribe(() => effectEnhancers.forEach((enhancer) => enhancer.touch()));
-};
+export default EffectRedux;
