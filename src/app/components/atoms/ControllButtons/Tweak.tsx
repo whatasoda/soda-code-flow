@@ -13,26 +13,22 @@ export interface TweakProps {
   direction: 1 | -1;
 }
 
-class Tweak extends React.Component<TweakProps> {
-  constructor(props: TweakProps) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
+const Tweak: React.SFC<TweakProps> = ({ status, direction }) => {
+  const { isAvailable } = getBarStatus(status);
 
-  public render() {
-    const { isAvailable } = getBarStatus(this.props.status);
+  return (
+    <a href="#" className={s(['button', !isAvailable && 'inavailable'])} onClick={direction < 0 ? left : right}>
+      <Icon name={direction < 0 ? 'cheveron-outline-left' : 'cheveron-outline-right'} size="xxlarge" />
+    </a>
+  );
+};
 
-    return (
-      <a href="#" className={s(['button', !isAvailable && 'inavailable'])} onClick={this.onClick}>
-        <Icon name={this.props.direction < 0 ? 'cheveron-outline-left' : 'cheveron-outline-right'} size="xxlarge" />
-      </a>
-    );
-  }
+const onClickFunc = (direction: 1 | -1) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  tweakStep(direction);
+};
 
-  private onClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    tweakStep(this.props.direction);
-  }
-}
+const left = onClickFunc(-1);
+const right = onClickFunc(1);
 
 export default Tweak;

@@ -12,21 +12,19 @@ export interface PlayPauseProps {
   status: State['flow']['status'];
 }
 
-class PlayPause extends React.Component<PlayPauseProps> {
-  public render() {
-    const { isAvailable, isRunning } = getBarStatus(this.props.status);
+const PlayPause: React.SFC<PlayPauseProps> = ({ status }) => {
+  const { isAvailable, isRunning } = getBarStatus(status);
 
-    return (
-      <a href="#" className={s(['button', !isAvailable && 'inavailable'])} onClick={this.onClick}>
-        <Icon name={isRunning ? 'pause-outline' : 'play-outline'} size="xxlarge" />
-      </a>
-    );
-  }
+  return (
+    <a href="#" className={s(['button', !isAvailable && 'inavailable'])} onClick={onClick}>
+      <Icon name={isRunning ? 'pause-outline' : 'play-outline'} size="xxlarge" />
+    </a>
+  );
+};
 
-  private onClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    toggleRunning();
-  }
-}
+const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  toggleRunning();
+};
 
 export default PlayPause;

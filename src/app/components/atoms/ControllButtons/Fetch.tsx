@@ -6,19 +6,15 @@ import general = require('./general.css');
 
 const s = styleHelper(general);
 
-class Fetch extends React.Component {
-  public render() {
-    return (
-      <a href="#" className={s(['button'])} onClick={this.onClick}>
-        <Icon name="reload" size="xxlarge" />
-      </a>
-    );
-  }
+const Fetch: React.SFC = () => (
+  <a href="#" className={s(['button'])} onClick={onClick}>
+    <Icon name="reload" size="xxlarge" />
+  </a>
+);
 
-  private onClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    e.preventDefault();
-    fetchCodeFlow();
-  }
-}
+const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  fetchCodeFlow();
+};
 
 export default Fetch;
