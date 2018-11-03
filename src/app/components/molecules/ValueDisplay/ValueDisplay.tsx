@@ -10,23 +10,17 @@ export interface ValueDisplayProps {
 const ValueDisplay: React.SFC<ValueDisplayProps> = ({ flowState, step }) => {
   const item = flowState ? flowState.flow[step] : null;
   if (!item) {
-    return (
-      <code>
-        <pre />
-      </code>
-    );
+    return <div />;
   }
   const { value, snapshot } = item.data;
 
   return (
-    <code>
-      <pre>
-        <ValueFormatter value={value} />
-        {Object.keys(snapshot).map((key) => (
-          <ValueFormatter key={key} value={snapshot[key]} />
-        ))}
-      </pre>
-    </code>
+    <div>
+      <ValueFormatter node={value} />
+      {Object.keys(snapshot).map((key) => (
+        <ValueFormatter key={key} node={snapshot[key]} />
+      ))}
+    </div>
   );
 };
 

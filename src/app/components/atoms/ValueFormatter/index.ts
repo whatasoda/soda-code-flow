@@ -1,3 +1,3 @@
-import ValueFormatter from './ValueFormat';
+import ValueFormatter from './ValueFomatter';
 
 export default ValueFormatter;

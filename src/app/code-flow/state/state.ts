@@ -33,9 +33,11 @@ class FlowState {
   public pushFlow([start, end]: CodeLocation, value: any) {
     const snapshot = this.identifierSnapshot();
     const data = format({ value, snapshot });
+    // console.log(data);
+
     this.flow.push({
       location: [start, end],
-      data: JSON.parse(JSON.stringify(data)),
+      data,
     });
   }
 

@@ -1,7 +1,7 @@
 import codeFlow, { CodeFlowPayload } from './codeFlow';
-import FlowState from './state';
+import FlowState, { DescriptorJSON } from './state';
 import { CustomContext } from './state/state';
 
-export { FlowState, CustomContext, CodeFlowPayload };
+export { FlowState, CustomContext, CodeFlowPayload, DescriptorJSON };
 
 export default codeFlow;
