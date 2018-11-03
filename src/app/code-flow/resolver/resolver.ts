@@ -1,7 +1,7 @@
 import { FlowProfile } from '../../../types/profile';
 import FlowState from '../state';
 
-export type Resolver = <T>(profile: FlowProfile, value: T) => T;
+export type Resolver = (profile: FlowProfile, value: unknown) => typeof value;
 
 const createResolver = (state: FlowState): Resolver => (profile, value) => {
   state.updateIdentifier(profile, value);
@@ -9,23 +9,12 @@ const createResolver = (state: FlowState): Resolver => (profile, value) => {
   state.pushFlow(profile.loc, value);
 
   if (typeof value === 'function') {
-    const func: (...args: any[]) => any = value as any;
+    const func = value;
     const thisArg = state.getThisArg(profile.loc);
 
-    const wrapped = function(this: any, ...args: any[]) {
-      if (profile.func) {
-        profile.func.args.forEach((arg, i) => state.pushFlow(arg, args[i]));
-      }
-
-      const result = func.apply(this || thisArg || undefined, args);
-
-      if (profile.func) {
-        state.pushFlow(profile.loc, result);
-      }
-      return result;
+    return function(this: any, ...args: any[]) {
+      return func.apply(this || thisArg || undefined, args);
     };
-
-    value = wrapped as any;
   }
 
   return value;
