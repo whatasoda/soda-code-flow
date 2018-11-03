@@ -35,8 +35,8 @@ const INSERT_SNAPSHOT_TARGET = base.extention(() =>
   base
     .action<INSERT_SNAPSHOT_TARGET>('INSERT_SNAPSHOT_TARGET')
     .actionCreator((type) => {
-      const insertWatchTarget = (position: number) => ({ type, position });
-      return { insertWatchTarget };
+      const insertSnapshotTarget = (position: number) => ({ type, position });
+      return { insertSnapshotTarget };
     })
     .reducer((state, { position }) => {
       const snapshotTargets = state.snapshotTargets.slice();
@@ -57,8 +57,8 @@ const UPDATE_SNAPSHOT_TARGET = base.extention(() =>
   base
     .action<UPDATE_SNAPSHOT_TARGET>('UPDATE_SNAPSHOT_TARGET')
     .actionCreator((type) => {
-      const setWatchTargetName = (position: number, target: Partial<SnapshotTarget>) => ({ type, position, target });
-      return { setWatchTargetName };
+      const updateSnapshotTarget = (position: number, target: Partial<SnapshotTarget>) => ({ type, position, target });
+      return { updateSnapshotTarget };
     })
     .reducer((state, { position, target }) => {
       const snapshotTargets = state.snapshotTargets.slice();
@@ -76,8 +76,8 @@ const MOVE_SNAPSHOT_TARGET = base.extention(() =>
   base
     .action<MOVE_SNAPSHOT_TARGET>('MOVE_SNAPSHOT_TARGET')
     .actionCreator((type) => {
-      const moveWatchOrder = (from: number, to: number) => ({ type, from, to });
-      return { moveWatchOrder };
+      const moveSnapshotTarget = (from: number, to: number) => ({ type, from, to });
+      return { moveSnapshotTarget };
     })
     .reducer((state, { from, to }) => {
       if (from === to) {
