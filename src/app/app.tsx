@@ -15,7 +15,11 @@ for (let i=0; i<10; i++) {
 `),
 );
 store.dispatch(actionCreators.flow.insertWatchTarget(0));
-store.dispatch(actionCreators.flow.setWatchTargetName(0, 'lower'));
+store.dispatch(
+  actionCreators.flow.setWatchTargetName(0, {
+    key: 'lower',
+  }),
+);
 
 EffectRedux.Provider(store)(enhancers);
 

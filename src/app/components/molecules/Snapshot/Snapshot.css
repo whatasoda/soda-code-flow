@@ -1,0 +1,9 @@
+.key {
+  font-size: inherit;
+}
+.headline {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+

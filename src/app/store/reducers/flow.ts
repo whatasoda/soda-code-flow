@@ -1,5 +1,6 @@
 import { Action } from 'redux';
 import { CodeFlowPayload, FlowState } from '../../code-flow';
+import { SnapshotTarget } from '../../code-flow/state/state';
 import unitRegistry, { ActionsMapOf, ActionsOf } from '../../lib/unit-redux';
 
 interface State {
@@ -11,7 +12,7 @@ interface State {
   code: string;
   base64: string;
   flowState: FlowState | null;
-  watch: string[];
+  snapshotTargets: SnapshotTarget[];
 }
 
 const base = unitRegistry<State>(() => ({
@@ -23,60 +24,69 @@ const base = unitRegistry<State>(() => ({
   code: '',
   base64: '',
   flowState: null,
-  watch: [],
+  snapshotTargets: [],
 }));
 
 // tslint:disable-next-line:interface-name
-interface INSERT_WATCH_TARGET extends Action<'INSERT_WATCH_TARGET'> {
+interface INSERT_SNAPSHOT_TARGET extends Action<'INSERT_SNAPSHOT_TARGET'> {
   position: number;
 }
-const INSERT_WATCH_TARGET = base.extention(() =>
+const INSERT_SNAPSHOT_TARGET = base.extention(() =>
   base
-    .action<INSERT_WATCH_TARGET>('INSERT_WATCH_TARGET')
+    .action<INSERT_SNAPSHOT_TARGET>('INSERT_SNAPSHOT_TARGET')
     .actionCreator((type) => {
       const insertWatchTarget = (position: number) => ({ type, position });
       return { insertWatchTarget };
     })
     .reducer((state, { position }) => {
-      const watch = state.watch.slice();
-      watch.splice(position, 0, '');
-      return { ...state, watch };
+      const snapshotTargets = state.snapshotTargets.slice();
+      snapshotTargets.splice(position, 0, {
+        key: '',
+        description: '',
+        color: '#ffffff',
+      });
+      return { ...state, snapshotTargets };
     }),
 );
 
-interface SET_WATCH_TARGET_NAME extends Action<'SET_WATCH_TARGET_NAME'> {
+interface UPDATE_SNAPSHOT_TARGET extends Action<'UPDATE_SNAPSHOT_TARGET'> {
   position: number;
-  name: string;
+  target: Partial<SnapshotTarget>;
 }
-const SET_WATCH_TARGET_NAME = base.extention(() =>
+const UPDATE_SNAPSHOT_TARGET = base.extention(() =>
   base
-    .action<SET_WATCH_TARGET_NAME>('SET_WATCH_TARGET_NAME')
+    .action<UPDATE_SNAPSHOT_TARGET>('UPDATE_SNAPSHOT_TARGET')
     .actionCreator((type) => {
-      const setWatchTargetName = (position: number, name: string) => ({ type, position, name });
+      const setWatchTargetName = (position: number, target: Partial<SnapshotTarget>) => ({ type, position, target });
       return { setWatchTargetName };
     })
-    .reducer((state, { position, name }) => {
-      const watch = state.watch.slice();
-      watch[position] = name;
-      return { ...state, watch };
+    .reducer((state, { position, target }) => {
+      const snapshotTargets = state.snapshotTargets.slice();
+      const curr = snapshotTargets[position];
+      snapshotTargets[position] = { ...curr, ...target };
+      return { ...state, snapshotTargets };
     }),
 );
 
-interface MOVE_WATCH_ORDER extends Action<'MOVE_WATCH_ORDER'> {
+interface MOVE_SNAPSHOT_TARGET extends Action<'MOVE_SNAPSHOT_TARGET'> {
   from: number;
   to: number;
 }
-const MOVE_WATCH_ORDER = base.extention(() =>
+const MOVE_SNAPSHOT_TARGET = base.extention(() =>
   base
-    .action<MOVE_WATCH_ORDER>('MOVE_WATCH_ORDER')
+    .action<MOVE_SNAPSHOT_TARGET>('MOVE_SNAPSHOT_TARGET')
     .actionCreator((type) => {
       const moveWatchOrder = (from: number, to: number) => ({ type, from, to });
       return { moveWatchOrder };
     })
     .reducer((state, { from, to }) => {
-      const watch = state.watch.slice();
-      watch.splice(to, 0, ...watch.splice(from, 1));
-      return { ...state, watch };
+      if (from === to) {
+        return state;
+      }
+      const snapshotTargets = state.snapshotTargets.slice();
+      const sliced = snapshotTargets.splice(from, 1);
+      snapshotTargets.splice(from < to ? to - 1 : to, 0, ...sliced);
+      return { ...state, snapshotTargets };
     }),
 );
 
@@ -156,9 +166,9 @@ const SET_CODE = base.extention(() =>
 );
 
 const registry = base
-  .combine(INSERT_WATCH_TARGET)
-  .combine(SET_WATCH_TARGET_NAME)
-  .combine(MOVE_WATCH_ORDER)
+  .combine(INSERT_SNAPSHOT_TARGET)
+  .combine(UPDATE_SNAPSHOT_TARGET)
+  .combine(MOVE_SNAPSHOT_TARGET)
   .combine(ASSIGN_CODE_FLOW)
   .combine(SET_STATUS)
   .combine(SET_STEP)

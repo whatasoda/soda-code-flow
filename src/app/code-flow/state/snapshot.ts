@@ -1,22 +1,3 @@
-import { ValueContainer } from './types';
-
-export interface FlowData {
-  value: any;
-  snapshot: ValueContainer;
-}
-
-export const format = (data: FlowData) => {
-  const value = DescriptorNode.deep(data.value);
-  const snapshot = Object.keys(data.snapshot).reduce<ValueContainer>(
-    (snapshot, key) => ({
-      ...snapshot,
-      [key]: DescriptorNode.deep(data.snapshot[key]),
-    }),
-    {},
-  );
-  return { value, snapshot };
-};
-
 const windowEntries = Object.entries(Object.getOwnPropertyDescriptors(window))
   .filter(
     ([_, { enumerable, value }]) =>
@@ -29,25 +10,25 @@ const windowEntries = Object.entries(Object.getOwnPropertyDescriptors(window))
   )
   .map<[string, any]>(([key, { value }]) => [key, value]);
 
-export interface DescriptorJSON {
+export interface SnapshotJSON {
   label: string | null;
-  children: { [key: string]: DescriptorJSON } | DescriptorJSON[] | null;
+  children: { [key: string]: SnapshotJSON } | SnapshotJSON[] | null;
 }
 
-class DescriptorNode implements DescriptorJSON {
-  public static deep(value: unknown) {
-    const root = new DescriptorNode(value);
+class SnapshotNode implements SnapshotJSON {
+  public static takeSnapshot(value: unknown) {
+    const root = new SnapshotNode(value);
     const stack = [[root]];
     let i = 0;
     while (stack.length !== i) {
-      const next: DescriptorNode[] = [];
+      const next: SnapshotNode[] = [];
       stack[i].forEach(({ body, childrenKeys }) => {
         if (!body) {
           return;
         }
         Object.entries(body).forEach(([key, value]) => {
           childrenKeys.push(key);
-          next.push(new DescriptorNode(value));
+          next.push(new SnapshotNode(value));
         });
       });
       i = stack.length;
@@ -76,7 +57,7 @@ class DescriptorNode implements DescriptorJSON {
   }
 
   public label: string | null = null;
-  public children: { [key: string]: DescriptorNode } | DescriptorNode[] | null = null;
+  public children: { [key: string]: SnapshotNode } | SnapshotNode[] | null = null;
   private body: object | any[] | null = null;
   private childrenKeys: string[] = [];
   constructor(value: unknown) {
@@ -117,3 +98,6 @@ class DescriptorNode implements DescriptorJSON {
     }
   }
 }
+
+export const { takeSnapshot } = SnapshotNode;
+export default SnapshotNode;

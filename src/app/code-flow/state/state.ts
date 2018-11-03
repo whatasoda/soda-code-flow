@@ -3,16 +3,25 @@ import { CodeLocation } from '../../../types/profile/codeLocation';
 import { ProgramProfile } from '../../../types/profile/custom';
 import { ScopeProfile } from '../../../types/profile/scope';
 import { getThisArgCode, isIdentifierCode } from '../util/identifier';
-import { FlowData, format } from './data';
+import { SnapshotJSON, takeSnapshot } from './snapshot';
 import { ValueContainer } from './types';
 
 export interface FlowItem {
   location: CodeLocation;
-  data: FlowData;
+  snapshots: SnapshotResult[];
+}
+
+export interface SnapshotTarget {
+  key: string | null;
+  description: string;
+  color: string;
+}
+export interface SnapshotResult extends SnapshotTarget {
+  snapshot?: SnapshotJSON;
 }
 
 export interface CustomContext {
-  watch: string[];
+  snapshotTargets: SnapshotTarget[];
 }
 
 class FlowState {
@@ -30,14 +39,11 @@ class FlowState {
     this.ctx = ctx;
   }
 
-  public pushFlow([start, end]: CodeLocation, value: any) {
-    const snapshot = this.identifierSnapshot();
-    const data = format({ value, snapshot });
-    // console.log(data);
-
+  public pushFlow([start, end]: CodeLocation, value: unknown) {
+    const snapshots = this.takeSnapshots(value);
     this.flow.push({
       location: [start, end],
-      data,
+      snapshots,
     });
   }
 
@@ -72,14 +78,17 @@ class FlowState {
     return null;
   }
 
-  private identifierSnapshot() {
-    return this.ctx.watch.reduce<ValueContainer>(
-      (container, key) => ({
-        ...container,
-        [key]: this.identifiers[0][key],
-      }),
-      {},
-    );
+  private takeSnapshots(value: unknown) {
+    return this.ctx.snapshotTargets.map<SnapshotResult>((target) => {
+      if (!target.key) {
+        const snapshot = takeSnapshot(value);
+        return { ...target, snapshot };
+      } else {
+        const variable = this.identifiers[0][target.key];
+        const snapshot = takeSnapshot(variable);
+        return { ...target, snapshot };
+      }
+    });
   }
 
   private getCode([start, end]: CodeLocation) {

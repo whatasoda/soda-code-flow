@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { DescriptorJSON } from '../../../code-flow';
+import { SnapshotJSON } from '../../../code-flow';
 
-interface ValueNodeProps {
-  node: DescriptorJSON;
+interface SnapshotValueProps {
+  snapshot: SnapshotJSON;
   space: string;
 }
-const ValueNode: React.SFC<ValueNodeProps> = ({ node: { label, children }, space }) => {
+const SnapshotValue: React.SFC<SnapshotValueProps> = ({ snapshot: { label, children }, space }) => {
   if (!children) {
     if (!label) {
       return null;
@@ -22,14 +22,14 @@ const ValueNode: React.SFC<ValueNodeProps> = ({ node: { label, children }, space
   space += '  ';
 
   const childrenEntries = Array.isArray(children)
-    ? children.map((node, key) => ({ key: key.toString(), node, isProp: false }))
-    : Object.entries(children).map(([key, node]) => ({ key, node, isProp: true }));
+    ? children.map((snapshot, key) => ({ key: key.toString(), snapshot, isProp: false }))
+    : Object.entries(children).map(([key, snapshot]) => ({ key, snapshot, isProp: true }));
 
-  const childrenElems = childrenEntries.map(({ key, node, isProp }) => (
+  const childrenElements = childrenEntries.map(({ key, snapshot, isProp }) => (
     <React.Fragment key={key}>
       {space}
       {isProp && <span className="hljs-attr">{`${key}: `}</span>}
-      <ValueNode {...{ node, space }} />
+      <SnapshotValue {...{ snapshot, space }} />
       {',\n'}
     </React.Fragment>
   ));
@@ -38,10 +38,10 @@ const ValueNode: React.SFC<ValueNodeProps> = ({ node: { label, children }, space
     <span>
       {label && `${label} `}
       {bracketOpen}
-      {childrenElems}
+      {childrenElements}
       {bracketClose}
     </span>
   );
 };
 
-export default ValueNode;
+export default SnapshotValue;

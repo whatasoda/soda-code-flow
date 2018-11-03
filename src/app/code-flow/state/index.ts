@@ -1,5 +1,5 @@
-import { DescriptorJSON } from './data';
+import { SnapshotJSON } from './snapshot';
 import FlowState from './state';
 
-export { DescriptorJSON };
+export { SnapshotJSON };
 export default FlowState;
