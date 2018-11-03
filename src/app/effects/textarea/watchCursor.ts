@@ -15,7 +15,7 @@ const watchCursor = connect<State, WatchCursorContext>(
     return wrapAll(dispatch, { setCursor, setFocus });
   },
 )((ctx, textarea: HTMLTextAreaElement | null, next?: () => void) => {
-  if (textarea && textarea.getRootNode() === textarea) {
+  if (textarea && textarea.getRootNode() !== textarea) {
     ctx.setCursor(textarea);
     const isFocused = document.activeElement === textarea;
     if (isFocused !== ctx.isFocused) {
