@@ -2,21 +2,19 @@ import { connect } from '../../lib/effect-redux';
 import { actionCreators, ActionCreatorsMap, State } from '../../store';
 import wrapAll from '../../util/wrapAll';
 
-interface SetColorContext {
+interface SetKeyContext {
   updateSnapshotTarget: ActionCreatorsMap['flow']['updateSnapshotTarget'];
 }
 
-const setColor = connect<State, SetColorContext>(
+const setKey = connect<State, SetKeyContext>(
   () => ({}),
   (dispatch) => {
     const { updateSnapshotTarget } = actionCreators.flow;
     return wrapAll(dispatch, { updateSnapshotTarget });
   },
-)(({ updateSnapshotTarget }, index: number, color: string) => {
-  const isAvailable = /^#(([0-9a-f]){3}){1,2}$/i.test(color);
-  if (isAvailable) {
-    updateSnapshotTarget(index, { color });
-  }
+)(({ updateSnapshotTarget }, index: number, key: string | null) => {
+  key = key || null;
+  updateSnapshotTarget(index, { key });
 });
 
-export default setColor;
+export default setKey;
