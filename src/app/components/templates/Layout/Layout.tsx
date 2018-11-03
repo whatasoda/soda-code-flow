@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CCode from '../../../container/CCode';
 import CSequencer from '../../../container/CSequencer';
-import CValueDisplay from '../../../container/CValueDisplay';
+import CSnapshotDisplay from '../../../container/CSnapshotDisplay';
 import styleHelper from '../../../util/styleHelper';
 import Header from '../../organisims/Header';
 import style = require('./Layout.css');
@@ -12,7 +12,7 @@ const Layout: React.SFC = () => (
   <div className={s(['layout'])}>
     <Header />
     <CCode />
-    <CValueDisplay />
+    <CSnapshotDisplay />
     <CSequencer />
   </div>
 );

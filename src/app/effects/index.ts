@@ -2,6 +2,7 @@ import fetchCodeFlow from './codeFlow/fetchCodeFlow';
 import sequence from './sequence/sequence';
 import toggleRunning from './sequence/toggleRunning';
 import tweakStep from './sequence/tweakStep';
+import setColor from './snapshot/setColor';
 import setCode from './textarea/setCode';
 import watchCursor from './textarea/watchCursor';
 
@@ -12,6 +13,7 @@ const effects = {
   tweakStep,
   setCode,
   watchCursor,
+  setColor,
 };
 export const enhancers = (Object.keys(effects) as Array<keyof typeof effects>).map((key) => effects[key].enhancer);
 

@@ -14,9 +14,9 @@ for (let i=0; i<10; i++) {
 }
 `),
 );
-store.dispatch(actionCreators.flow.insertWatchTarget(0));
+store.dispatch(actionCreators.flow.insertSnapshotTarget(0));
 store.dispatch(
-  actionCreators.flow.setWatchTargetName(0, {
+  actionCreators.flow.updateSnapshotTarget(0, {
     key: 'lower',
   }),
 );

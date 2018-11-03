@@ -6,9 +6,12 @@ import { DispatchPropsOf, StatePropsOf } from './types';
 type StateProps = StatePropsOf<SnapshotDisplayProps>;
 type DispatchProps = DispatchPropsOf<SnapshotDisplayProps>;
 
-const CValueDisplay = ReactRedux.connect<StateProps, DispatchProps, {}, State>(({ flow: { flowState, step } }) => ({
-  flowState,
-  step,
-}))(SnapshotDisplay);
+const CSnapshotDisplay = ReactRedux.connect<StateProps, DispatchProps, {}, State>(
+  ({ flow: { flowState, step, snapshotTargets } }) => ({
+    flowState,
+    step,
+    snapshotTargets,
+  }),
+)(SnapshotDisplay);
 
-export default CValueDisplay;
+export default CSnapshotDisplay;
