@@ -9,7 +9,7 @@ import style = require('./Layout.css');
 const s = styleHelper(style);
 
 const Layout: React.SFC = () => (
-  <div className={s(['layout'])}>
+  <div className={s(['layout'])} spellCheck={false}>
     <Header />
     <CCode />
     <CSnapshotDisplay />

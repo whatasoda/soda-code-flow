@@ -1,8 +1,39 @@
-.key {
-  font-size: inherit;
+.header {
+  border-left: 5px solid #aaaaaa;
+  padding: 0.4em 0.6em;
 }
+
 .headline {
-  margin: 0;
   display: flex;
   align-items: center;
+  margin: 0;
+}
+
+.chevron {
+  display: block;
+  transition-duration: 0.2s;
+}
+.open .chevron {
+  transform: rotate(90deg);
+}
+.close .chevron {
+  transform: rotate(0);
+}
+
+.description {
+  margin: 0.4em 0 0;
+}
+
+.main {
+  margin: 0.8em 0;
+  transition-duration: 0.2s;
+  overflow: auto;
+  max-height: 40em;
+  padding: 0.4em;
+  border: 1px solid #aaaaaa;
+  border-radius: 0.4em;
+}
+
+.close .main {
+  max-height: 4em;
 }

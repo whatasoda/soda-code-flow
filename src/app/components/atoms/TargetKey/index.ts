@@ -1,3 +1,3 @@
-import TargetKey from './TargetKey';
+import ClearTextInput from './ClearTextInput';
 
-export default TargetKey;
+export default ClearTextInput;

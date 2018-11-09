@@ -12,6 +12,7 @@
   text-align: center;
   background: none;
   color: rgba(0, 0, 0, 0);
+  font-size: 1.6rem;
   transition-duration: 0.1s;
 }
 
@@ -27,8 +28,8 @@
 }
 
 .input:focus, .input:focus ~ .highlight {
-  width: 5em;
-  height: auto;
+  width: 8rem;
+  height: 1.6rem;
 }
 
 .highlight {
