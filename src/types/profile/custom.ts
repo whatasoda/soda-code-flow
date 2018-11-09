@@ -14,3 +14,7 @@ export interface ProgramProfile {
 export interface DeclarationProfile {
   id: CodeLocation;
 }
+
+export interface ThisObjectProfile {
+  obj: CodeLocation;
+}

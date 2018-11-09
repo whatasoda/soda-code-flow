@@ -10,7 +10,7 @@ const createResolver = (state: FlowState): Resolver => (profile, value) => {
 
   if (typeof value === 'function') {
     const func = value;
-    const thisArg = state.getThisArg(profile.loc);
+    const thisArg = state.getThisArg(profile);
 
     return function(this: any, ...args: any[]) {
       return func.apply(this || thisArg || undefined, args);

@@ -1,5 +1,5 @@
 import { CodeLocation } from './codeLocation';
-import { DeclarationProfile, FunctionProfile, ProgramProfile } from './custom';
+import { DeclarationProfile, FunctionProfile, ProgramProfile, ThisObjectProfile } from './custom';
 import { ScopeProfile } from './scope';
 
 declare module '@babel/traverse' {
@@ -17,4 +17,5 @@ export interface CustomProfiles {
   func?: FunctionProfile;
   prog?: ProgramProfile;
   decl?: DeclarationProfile;
+  tobj?: ThisObjectProfile;
 }

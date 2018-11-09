@@ -2,7 +2,7 @@ import { FlowProfile } from '../../../types/profile';
 import { CodeLocation } from '../../../types/profile/codeLocation';
 import { ProgramProfile } from '../../../types/profile/custom';
 import { ScopeProfile } from '../../../types/profile/scope';
-import { getThisArgCode, isIdentifierCode } from '../util/identifier';
+import { isIdentifierCode } from '../util/identifier';
 import { SnapshotJSON, takeSnapshot } from './snapshot';
 import { ValueContainer } from './types';
 
@@ -51,8 +51,11 @@ class FlowState {
     this.values[this.getCode(location)] = value;
   }
 
-  public getThisArg(location: CodeLocation) {
-    const code = getThisArgCode(this.getCode(location));
+  public getThisArg({ tobj }: FlowProfile) {
+    if (!tobj) {
+      return null;
+    }
+    const code = this.getCode(tobj.obj);
     return code ? this.values[code] : null;
   }
 

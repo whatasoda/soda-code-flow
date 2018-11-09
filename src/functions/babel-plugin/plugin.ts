@@ -36,18 +36,22 @@ const plugin = ({ types }: typeof Babel): Babel.PluginObj => {
       VariableDeclaration(path) {
         path.get('declarations').forEach((declaration) => {
           const init = declaration.get('init');
-          const { id } = declaration.node;
-          const start = id.start || 0;
-          const end = id.end || 0;
+          const {
+            id: { start, end },
+          } = declaration.node;
           Tools.register(ctx, init, {
-            decl: { id: [start, end] },
+            decl: { id: [start || 0, end || 0] },
           });
         });
       },
 
       MemberExpression(path) {
-        Tools.register(ctx, path);
-        Tools.register(ctx, path.get('object'));
+        const objPath = path.get('object');
+        const { start, end } = objPath.node;
+        Tools.register(ctx, path, {
+          tobj: { obj: [start || 0, end || 0] },
+        });
+        Tools.register(ctx, objPath);
       },
 
       CallExpression(path) {
