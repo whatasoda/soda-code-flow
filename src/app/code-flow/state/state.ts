@@ -17,17 +17,19 @@ export interface SnapshotTarget {
 }
 export interface SnapshotResult extends SnapshotTarget {
   snapshot?: SnapshotJSON;
+  loc?: CodeLocation;
 }
 
-interface Identifiers {
-  [name: string]:
-    | {
-        [scope: number]: {
-          loc: CodeLocation;
-          value: any;
-        };
-      }
-    | undefined;
+interface IdProfile {
+  loc: CodeLocation;
+  value: any;
+}
+interface IdProfileMap {
+  [scope: number]: IdProfile;
+}
+
+export interface IdProfileMaps {
+  [name: string]: IdProfileMap | undefined;
 }
 
 export interface CustomContext {
@@ -39,7 +41,7 @@ class FlowState {
   public flow: FlowItem[] = [];
   public scopes: ScopeProfile[];
   public values: ValueContainer = {};
-  public identifiers: Identifiers = {};
+  public identifiers: IdProfileMaps = {};
   public ctx: CustomContext;
 
   constructor({ code, scopes }: ProgramProfile, ctx: CustomContext) {
@@ -120,13 +122,15 @@ class FlowState {
       if (!target.key) {
         // DYNAMIC
         const snapshot = takeSnapshot(value);
-        return { ...target, snapshot };
+        const { loc } = profile;
+        return { ...target, snapshot, loc };
       } else {
         const { idProfile } = this.getIdProfile(target.key, profile.scope);
         if (idProfile) {
           const variable = idProfile.value;
+          const { loc } = idProfile;
           const snapshot = takeSnapshot(variable);
-          return { ...target, snapshot };
+          return { ...target, snapshot, loc };
         }
         return { ...target };
       }

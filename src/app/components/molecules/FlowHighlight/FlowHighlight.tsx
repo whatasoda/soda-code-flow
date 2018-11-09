@@ -12,8 +12,28 @@ export interface FlowHighlightProps {
 }
 
 const FlowHighlight: React.SFC<FlowHighlightProps> = ({ code, item }) => {
-  const [start = 0, end = 0] = item ? item.location : [];
-  return <CodeDeco {...{ code, start, end }} className={s(['curr'])} />;
+  const data: Array<{ start: number; end: number; color: string }> = [];
+  const className = s(['deco']);
+  if (item) {
+    if (item.snapshots.every(({ key }) => !!key)) {
+      const color = '#ffee00';
+      const [start, end] = item.location;
+      data.push({ start, end, color });
+    }
+    item.snapshots.forEach(({ color, loc }) => {
+      if (loc) {
+        const [start, end] = loc;
+        data.push({ start, end, color });
+      }
+    });
+  }
+  return (
+    <React.Fragment>
+      {data.map(({ start, end, color }, key) => (
+        <CodeDeco {...{ key, code, start, end, className }} className={s(['deco'])} style={{ background: color }} />
+      ))}
+    </React.Fragment>
+  );
 };
 
 export default FlowHighlight;
