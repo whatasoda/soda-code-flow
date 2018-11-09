@@ -6,7 +6,7 @@ export type Resolver = (profile: FlowProfile, value: unknown) => typeof value;
 const createResolver = (state: FlowState): Resolver => (profile, value) => {
   state.updateIdentifier(profile, value);
   state.updateValue(profile.loc, value);
-  state.pushFlow(profile.loc, value);
+  state.pushFlow(profile, value);
 
   if (typeof value === 'function') {
     const func = value;

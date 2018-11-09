@@ -2,7 +2,6 @@ import { FlowProfile } from '../../../types/profile';
 import { CodeLocation } from '../../../types/profile/codeLocation';
 import { ProgramProfile } from '../../../types/profile/custom';
 import { ScopeProfile } from '../../../types/profile/scope';
-import { isIdentifierCode } from '../util/identifier';
 import { SnapshotJSON, takeSnapshot } from './snapshot';
 import { ValueContainer } from './types';
 
@@ -20,6 +19,17 @@ export interface SnapshotResult extends SnapshotTarget {
   snapshot?: SnapshotJSON;
 }
 
+interface Identifiers {
+  [name: string]:
+    | {
+        [scope: number]: {
+          loc: CodeLocation;
+          value: any;
+        };
+      }
+    | undefined;
+}
+
 export interface CustomContext {
   snapshotTargets: SnapshotTarget[];
 }
@@ -29,20 +39,19 @@ class FlowState {
   public flow: FlowItem[] = [];
   public scopes: ScopeProfile[];
   public values: ValueContainer = {};
-  public identifiers: ValueContainer[];
+  public identifiers: Identifiers = {};
   public ctx: CustomContext;
 
   constructor({ code, scopes }: ProgramProfile, ctx: CustomContext) {
     this.code = code;
     this.scopes = scopes;
-    this.identifiers = scopes.map(() => ({}));
     this.ctx = ctx;
   }
 
-  public pushFlow([start, end]: CodeLocation, value: unknown) {
-    const snapshots = this.takeSnapshots(value);
+  public pushFlow(profile: FlowProfile, value: unknown) {
+    const snapshots = this.takeSnapshots(profile, value);
     this.flow.push({
-      location: [start, end],
+      location: profile.loc,
       snapshots,
     });
   }
@@ -60,36 +69,66 @@ class FlowState {
   }
 
   public updateIdentifier(profile: FlowProfile, value: any) {
-    const code = this.getCode(profile.loc);
-    const scope = this.findScope(code, this.scopes[profile.scope]);
+    if (profile.decl) {
+      const {
+        decl: { id: loc },
+        scope,
+      } = profile;
+      const code = this.getCode(loc);
+      const idProfile = { loc, value };
+      const idProfiles = this.identifiers[code];
+      if (!idProfiles) {
+        this.identifiers[code] = { [scope]: idProfile };
+      } else {
+        idProfiles[scope] = idProfile;
+      }
+    }
 
-    if (scope) {
-      this.identifiers[scope.id][code] = value;
+    const code = this.getCode(profile.loc);
+    const { idProfile } = this.getIdProfile(code, profile.scope);
+    if (idProfile) {
+      idProfile.value = value;
     }
   }
 
-  private findScope(code: string, initial: ScopeProfile): ScopeProfile | null {
-    if (isIdentifierCode(code)) {
-      let scope = initial;
-      while (scope) {
-        if (scope.bindings.includes(code)) {
-          return scope;
-        }
-        scope = this.scopes[scope.parent];
+  private getIdProfile(code: string, scopeId: number) {
+    const idProfiles = this.identifiers[code];
+    if (idProfiles) {
+      const scope = this.findNearestScope(code, this.scopes[scopeId]);
+      if (scope) {
+        const idProfile = idProfiles[scope.id];
+        return { idProfiles, idProfile };
       }
+      return { idProfiles };
+    }
+    return {};
+  }
+
+  private findNearestScope(code: string, initial: ScopeProfile): ScopeProfile | null {
+    let scope = initial;
+    while (scope) {
+      if (scope.bindings.includes(code)) {
+        return scope;
+      }
+      scope = this.scopes[scope.parent];
     }
     return null;
   }
 
-  private takeSnapshots(value: unknown) {
+  private takeSnapshots(profile: FlowProfile, value: unknown) {
     return this.ctx.snapshotTargets.map<SnapshotResult>((target) => {
       if (!target.key) {
+        // DYNAMIC
         const snapshot = takeSnapshot(value);
         return { ...target, snapshot };
       } else {
-        const variable = this.identifiers[0][target.key];
-        const snapshot = takeSnapshot(variable);
-        return { ...target, snapshot };
+        const { idProfile } = this.getIdProfile(target.key, profile.scope);
+        if (idProfile) {
+          const variable = idProfile.value;
+          const snapshot = takeSnapshot(variable);
+          return { ...target, snapshot };
+        }
+        return { ...target };
       }
     });
   }
