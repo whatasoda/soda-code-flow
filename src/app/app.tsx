@@ -60,10 +60,8 @@ while (next.length) {
   const layer = [];
   curr = next;
   next = [];
-  curr.forEach(({ name, children, ...aa }) => {
-    // next = next.concat(children);
+  curr.forEach(({ name, children }) => {
     next.push(...children);
-    console.log(next);
     const segment = { name, childCount: children.length };
     layer.push(segment);
   });
@@ -82,8 +80,6 @@ while (layers.length) {
     return { name, children };
   });
 }
-let a, b;
-a, b = nextLayer, ;
 console.log(nextLayer);`),
 );
 
