@@ -12,9 +12,11 @@ const createResolver = (state: FlowState): Resolver => (profile, value) => {
     const func = value;
     const thisArg = state.getThisArg(profile);
 
-    return function(this: any, ...args: any[]) {
-      return func.apply(this || thisArg || undefined, args);
-    };
+    if (thisArg !== null && thisArg !== undefined) {
+      return function(this: any, ...args: any[]) {
+        return func.apply(this || thisArg || undefined, args);
+      };
+    }
   }
 
   return value;
