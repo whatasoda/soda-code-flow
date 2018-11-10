@@ -1,6 +1,10 @@
 import * as React from 'react';
 import FlowState, { SnapshotTarget } from '../../../code-flow/state/state';
+import styleHelper from '../../../util/styleHelper';
 import Snapshot from '../../molecules/Snapshot';
+import style = require('./ValueDisplay.css');
+
+const s = styleHelper(style);
 
 export interface SnapshotDisplayProps {
   flowState: FlowState | null;
@@ -17,7 +21,7 @@ const SnapshotDisplay: React.SFC<SnapshotDisplayProps> = ({ flowState, snapshotT
     ? item.snapshots.map((snapshot, i) => ({ ...snapshot, ...snapshotTargets[i] }))
     : snapshotTargets;
   return (
-    <div>
+    <div className={s(['container'])}>
       {snapshots.map((snapshot, index) => (
         <Snapshot key={index} {...{ index, snapshot }} />
       ))}
