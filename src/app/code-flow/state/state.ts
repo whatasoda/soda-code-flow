@@ -8,6 +8,7 @@ import { ValueContainer } from './types';
 export interface FlowItem {
   location: CodeLocation;
   snapshots: SnapshotResult[];
+  timestamp: number;
 }
 
 export interface SnapshotTarget {
@@ -52,9 +53,11 @@ class FlowState {
 
   public pushFlow(profile: FlowProfile, value: unknown) {
     const snapshots = this.takeSnapshots(profile, value);
+    const timestamp = Date.now();
     this.flow.push({
       location: profile.loc,
       snapshots,
+      timestamp,
     });
   }
 
