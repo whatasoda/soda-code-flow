@@ -1,14 +1,4 @@
-const windowEntries = Object.entries(Object.getOwnPropertyDescriptors(window))
-  .filter(
-    ([_, { enumerable, value }]) =>
-      !enumerable &&
-      typeof value !== 'undefined' &&
-      typeof value !== 'number' &&
-      typeof value !== 'string' &&
-      typeof value !== 'boolean' &&
-      value !== null,
-  )
-  .map<[string, any]>(([key, { value }]) => [key, value]);
+import { findWindowEntry } from './windowEntires';
 
 export interface SnapshotJSON {
   label: string | null;
@@ -70,9 +60,9 @@ class SnapshotNode implements SnapshotJSON {
   }
 
   private format(value: unknown) {
-    const desc = windowEntries.find(([_, val]) => value === val);
-    if (desc) {
-      const name = desc[0];
+    const entry = findWindowEntry(value);
+    if (entry) {
+      const { name } = entry;
       this.label = `[global ${name}]`;
     } else if (typeof value === 'undefined') {
       this.label = 'undefined';

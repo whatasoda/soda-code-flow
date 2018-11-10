@@ -1,5 +1,6 @@
 import { FlowProfile } from '../../../types/profile';
 import FlowState from '../state';
+import { findWindowEntry } from '../state/windowEntires';
 
 export type Resolver = (profile: FlowProfile, value: unknown) => typeof value;
 
@@ -10,6 +11,12 @@ const createResolver = (state: FlowState): Resolver => (profile, value) => {
 
   if (typeof value === 'function') {
     const func = value;
+
+    const entry = findWindowEntry(func);
+    if (entry) {
+      return value;
+    }
+
     const thisArg = state.getThisArg(profile);
 
     if (thisArg !== null && thisArg !== undefined) {
