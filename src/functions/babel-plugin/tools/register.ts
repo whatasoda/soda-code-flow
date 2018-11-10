@@ -6,6 +6,13 @@ import ToolHelper from './helper';
 
 const register = ToolHelper((ctx, path: NodePath<Node | null>, profiles: CustomProfiles = {}) => {
   const { state } = ctx;
+
+  if (path.isSpreadElement()) {
+    path = path.get('argument');
+  } else if (path.isRestElement()) {
+    path = path.get('argument');
+  }
+
   if (!isTruthyPath(path)) {
     return;
   }

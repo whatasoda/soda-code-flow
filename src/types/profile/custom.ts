@@ -13,6 +13,7 @@ export interface ProgramProfile {
 
 export interface DeclarationProfile {
   id: CodeLocation;
+  isIdentifier: boolean;
 }
 
 export interface ThisObjectProfile {
