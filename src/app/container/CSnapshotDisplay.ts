@@ -1,5 +1,5 @@
 import * as ReactRedux from 'react-redux';
-import SnapshotDisplay, { SnapshotDisplayProps } from '../components/organisims/SnapshotDisplay/ValueDisplay';
+import SnapshotDisplay, { SnapshotDisplayProps } from '../components/organisims/SnapshotDisplay/SnapshotDisplay';
 import { State } from '../store';
 import { DispatchPropsOf, StatePropsOf } from './types';
 

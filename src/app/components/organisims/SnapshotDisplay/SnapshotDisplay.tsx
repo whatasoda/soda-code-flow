@@ -2,7 +2,7 @@ import * as React from 'react';
 import FlowState, { SnapshotTarget } from '../../../code-flow/state/state';
 import styleHelper from '../../../util/styleHelper';
 import Snapshot from '../../molecules/Snapshot';
-import style = require('./ValueDisplay.css');
+import style = require('./SnapshotDisplay.css');
 
 const s = styleHelper(style);
 

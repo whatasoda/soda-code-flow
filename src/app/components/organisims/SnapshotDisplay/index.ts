@@ -1,3 +1,3 @@
-import SnapshotDisplay from './ValueDisplay';
+import SnapshotDisplay from './SnapshotDisplay';
 
 export default SnapshotDisplay;
