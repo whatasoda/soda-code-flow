@@ -2,14 +2,17 @@
   display: grid;
   grid-template-areas: 'buttons bar';
   grid-template-columns: 40rem 1fr;
-  padding: 0 0.8rem;
 }
 
-.buttons {
+.container>*:nth-child(1) {
+  grid-area: buttons;
   display: flex;
   align-items: center;
+  padding: 0 0.8rem;
+  background-color: #3f4448;
+  color: #ccc;
 }
 
-.bar {
-  padding: 1.6rem;
+.container>*:nth-child(2) {
+  grid-area: bar;
 }

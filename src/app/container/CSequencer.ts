@@ -6,8 +6,9 @@ import { DispatchPropsOf, StatePropsOf } from './types';
 type StateProps = StatePropsOf<SequencerProps>;
 type DispatchProps = DispatchPropsOf<SequencerProps>;
 
-const CSequencer = ReactRedux.connect<StateProps, DispatchProps, {}, State>(({ flow: { status } }) => ({ status }))(
-  Sequencer,
-);
+const CSequencer = ReactRedux.connect<StateProps, DispatchProps, {}, State>(({ flow: { status, time } }) => ({
+  status,
+  time,
+}))(Sequencer);
 
 export default CSequencer;

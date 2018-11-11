@@ -14,7 +14,7 @@ export interface SnapshotDisplayProps {
 
 const SnapshotDisplay: React.SFC<SnapshotDisplayProps> = ({ flowState, snapshotTargets, step }) => {
   if (!flowState) {
-    return <div />;
+    return <div className={s(['container'])} />;
   }
   const item = flowState.flow[step] || null;
   const snapshots = item

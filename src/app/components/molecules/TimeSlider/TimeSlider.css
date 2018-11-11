@@ -1,0 +1,48 @@
+.container {
+  background-color: #3f4448;
+  padding: 0 1.6rem;
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.bar::before {
+  position: absolute;
+  display: block;
+  content: ' ';
+  font-size: 0;
+  width: 100%;
+  height: 0.4rem;
+  background-color: #fff;
+  border-radius: 0.2rem;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+}
+
+.knob {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  width: 0;
+  height: 0;
+}
+
+.knob::after {
+  position: absolute;
+  display: block;
+  content: ' ';
+  font-size: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: #aaaa;
+  border-radius: 1.2rem;
+  top: -10.0rem;
+  bottom: -10.0rem;
+  left: -10.0rem;
+  right: -10.0rem;
+  margin: auto;
+}

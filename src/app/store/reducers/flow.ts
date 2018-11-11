@@ -11,6 +11,7 @@ interface State {
   loop: boolean;
   code: string;
   base64: string;
+  time: number;
   flowState: FlowState | null;
   snapshotTargets: SnapshotTarget[];
 }
@@ -23,9 +24,23 @@ const base = unitRegistry<State>(() => ({
   loop: false,
   code: '',
   base64: '',
+  time: 0,
   flowState: null,
   snapshotTargets: [],
 }));
+
+interface SET_TIME extends Action<'SET_TIME'> {
+  time: number;
+}
+const SET_TIME = base.extention(() =>
+  base
+    .action<SET_TIME>('SET_TIME')
+    .actionCreator((type) => {
+      const setTime = (time: number) => ({ type, time });
+      return { setTime };
+    })
+    .reducer((state, { time }) => ({ ...state, time })),
+);
 
 // tslint:disable-next-line:interface-name
 interface INSERT_SNAPSHOT_TARGET extends Action<'INSERT_SNAPSHOT_TARGET'> {
@@ -166,6 +181,7 @@ const SET_CODE = base.extention(() =>
 );
 
 const registry = base
+  .combine(SET_TIME)
   .combine(INSERT_SNAPSHOT_TARGET)
   .combine(UPDATE_SNAPSHOT_TARGET)
   .combine(MOVE_SNAPSHOT_TARGET)

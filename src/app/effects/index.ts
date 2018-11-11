@@ -1,5 +1,7 @@
 import fetchCodeFlow from './codeFlow/fetchCodeFlow';
 import sequence from './sequence/sequence';
+import setStepByTime from './sequence/setStepByTime';
+import startTimeSlide from './sequence/startTimeSlide';
 import toggleRunning from './sequence/toggleRunning';
 import tweakStep from './sequence/tweakStep';
 import setColor from './snapshot/setColor';
@@ -18,6 +20,8 @@ const effects = {
   setColor,
   setKey,
   setDescription,
+  setStepByTime,
+  startTimeSlide,
 };
 export const enhancers = Object.values(effects).map((effect) => effect.enhancer);
 
