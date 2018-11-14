@@ -1,0 +1,31 @@
+.container {
+  display: grid;
+  height: 100%;
+  gap: 10px;
+  align-items: center;
+  grid-template:
+    'copied url' 1fr /
+    60px 1fr;
+}
+
+.copied {
+  font-size: 18px;
+  color: #fff;
+}
+
+.url {
+  overflow: hidden;
+  grid-area: url;
+  position: relative;
+  height: 100%;
+}
+
+.scroll-box {
+  position: absolute;
+  top: -100%;
+  bottom: -100%;
+  left: 0;
+  overflow: auto;
+  display: grid;
+  align-items: center;
+}

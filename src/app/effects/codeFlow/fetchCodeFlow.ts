@@ -2,6 +2,7 @@ import codeFlow, { CustomContext } from '../../code-flow';
 import { SnapshotTarget } from '../../code-flow/state/state';
 import { connect } from '../../lib/effect-redux';
 import { actionCreators, ActionCreatorsMap, State } from '../../store';
+import { setCodeIntoUrl } from '../../util/codeOnUrl';
 import wrapAll from '../../util/wrapAll';
 
 interface FetchCodeFlowContext {
@@ -17,13 +18,23 @@ const fetchCodeFlow = connect<State, FetchCodeFlowContext>(
     const { assignCodeFlow, setStatus } = actionCreators.flow;
     return wrapAll(dispatch, { assignCodeFlow, setStatus });
   },
-)(async ({ code, snapshotTargets, assignCodeFlow, setStatus }) => {
+)(async ({ code, snapshotTargets, assignCodeFlow, setStatus }, base64?: string) => {
   setStatus('fetching');
-  const codeFlowPayload = await codeFlow<CustomContext>({
+  const props = {
     source: code,
     ctx: { snapshotTargets },
-  });
-  assignCodeFlow(codeFlowPayload);
+  };
+  try {
+    const codeFlowPayload = await codeFlow<CustomContext>(base64 || props);
+    assignCodeFlow(codeFlowPayload);
+    if (codeFlowPayload.base64 !== base64) {
+      setCodeIntoUrl(codeFlowPayload.base64);
+    }
+  } catch (e) {
+    // tslint:disable-next-line:no-console
+    console.log(e);
+    setCodeIntoUrl(null);
+  }
   setStatus('ready');
 });
 

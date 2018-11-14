@@ -2,22 +2,22 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-areas:
-    'header header'
-    'code display'
-    'code display'
-    'sequencer sequencer';
-  grid-auto-rows: 50px 1fr 1fr 50px;
-  grid-auto-columns: 1fr 1fr;
+  grid-template:
+    'header header header' 50px
+    'code . display' 1fr
+    'sequencer sequencer sequencer' 50px /
+    1fr 2px 1fr;
 }
 
 @media screen and (max-width: 800px) {
   .layout {
-    grid-template-areas:
-      'header header'
-      'code code'
-      'display display'
-      'sequencer sequencer';
+    grid-template:
+      'header header' 50px
+      'code code' 1fr
+      '. .' 2px
+      'display display' 1fr
+      'sequencer sequencer' 50px /
+      1fr 1fr;
   }
 }
 

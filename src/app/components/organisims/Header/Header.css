@@ -1,12 +1,26 @@
 .container {
   background-color: #3f4448;
   display: grid;
-  grid-template-columns: 1fr 200px;
+  align-items: center;
+  gap: 10px;
+  grid-template:
+    'title . share github' 1fr /
+    auto 1fr 400px auto;
   padding: 0 10px;
 }
 
-.head {
-  color: #dddddd;
+.title {
+  color: #ddd;
   margin: 0;
   line-height: 50px;
+  grid-area: title;
+}
+
+.share {
+  grid-area: share;
+}
+
+.github {
+  color: #ddd;
+  grid-area: github;
 }
