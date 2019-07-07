@@ -27,6 +27,7 @@ const fetchCodeFlow = connect<State, FetchCodeFlowContext>(
   try {
     const codeFlowPayload = await codeFlow<CustomContext>(base64 || props);
     assignCodeFlow(codeFlowPayload);
+    console.log(codeFlowPayload.base64);
     if (codeFlowPayload.base64 !== base64) {
       setCodeIntoUrl(codeFlowPayload.base64);
     }

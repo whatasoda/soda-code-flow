@@ -6,4 +6,7 @@ import fetchCodeFlow from './effects/codeFlow/fetchCodeFlow';
 import { getCodeFromUrl } from './util/codeOnUrl';
 
 ReactDOM.render(<App />, document.getElementById('app'));
-fetchCodeFlow(getCodeFromUrl() || undefined);
+const base64 = getCodeFromUrl() || undefined;
+console.log(base64);
+
+fetchCodeFlow(base64);
